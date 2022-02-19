@@ -101,7 +101,9 @@ class Agent {
 
         if (cmd === 'see') {
             const visibleFlags = p.filter(x => x.cmd && (x.cmd.p[0] === 'f' || x.cmd.p[0] === 'g'))
-            // console.log(`msg - ${msg}\n p - ${p}\n`)
+
+            let coords = undefined;
+
             if (visibleFlags > 3) {
 
             } else if (visibleFlags.length === 2) {
@@ -111,8 +113,10 @@ class Agent {
                 const flagName2 =  parseFlagFromArray(visibleFlags[1].cmd.p);
                 const point2 = Flags[flagName];
             } else if (visibleFlags.length === 1) {
-            //    x = flag.x - point.x
+                coords = this.orientationWithOneFlag(visibleFlags[0]);
             }
+
+            console.log(coords);
         }
     }
 
@@ -128,8 +132,21 @@ class Agent {
         }
     }
 
+    // flag: { p: [ 67.4, -8 ], cmd: { p: [ 'f', 'r', 't', 10 ] } }
     orientationWithOneFlag(flag) {
+        const dist = flag.p[0];
+        const angle = flag.p[1] + this.sense_body.turn[0];
+        const flag_coord = Flags[parseFlagFromArray(flag.cmd.p)];
 
+        const loc_x = dist* Math.cos(angle* Math.PI /180);
+        const loc_y = dist* Math.sin(angle* Math.PI /180);
+
+        // console.log(flag_coord, loc_x, loc_y);
+
+        const x = flag_coord.x - loc_x;
+        const y = flag_coord.y - loc_y;
+
+        return {x,y};
     }
 }
 

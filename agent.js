@@ -59,6 +59,7 @@ class Agent {
                 if ("s" == input) this.act = {n: "kick", v: 100}
             }
         })
+        this.sense_body = {}
     }
 
     msgGot(msg) { // Получение сообщения
@@ -92,6 +93,12 @@ class Agent {
     // cmd === see||sense_body
     analyzeEnv(msg, cmd, p) { // Анализ сообщения
 
+        if (cmd === 'sense_body') {
+            for (const sense of p.filter(x=>x.cmd)){
+                this.sense_body[sense.cmd] = sense.p;
+            }
+        }
+
         if (cmd === 'see') {
             const visibleFlags = p.filter(x => x.cmd && (x.cmd.p[0] === 'f' || x.cmd.p[0] === 'g'))
             // console.log(`msg - ${msg}\n p - ${p}\n`)
@@ -119,6 +126,10 @@ class Agent {
             }
             this.act = null // Сброс команды
         }
+    }
+
+    orientationWithOneFlag(flag) {
+
     }
 }
 

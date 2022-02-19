@@ -84,6 +84,16 @@ class Agent {
                 return Math.sqrt((p1.x-p2.x)**2+(p1.y-p2.y)**2)
             },
         }
+        if (cmd === 'see') {
+            // console.log(`msg - ${msg}\n p - ${p}\n`)
+            for(let i=0; i < p.length;i++) {
+                console.log(`${p[i]}`)
+                for(let j=0; j < p[i].length;j++) {
+
+                }
+            }
+
+        }
     }
 
     sendCmd() {

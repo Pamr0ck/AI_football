@@ -95,11 +95,16 @@ class Agent {
         if (cmd === 'see') {
             const visibleFlags = p.filter(x => x.cmd && (x.cmd.p[0] === 'f' || x.cmd.p[0] === 'g'))
             // console.log(`msg - ${msg}\n p - ${p}\n`)
-            for(let i=0; i < visibleFlags.length;i++) {
-                const flagName =  parseFlagFromArray(visibleFlags[i].cmd.p);
+            if (visibleFlags > 3) {
+
+            } else if (visibleFlags.length === 2) {
+                const flagName =  parseFlagFromArray(visibleFlags[0].cmd.p);
                 console.log(Flags[flagName]);
-                for(let j=0; j < p[i].length;j++) {
-                }
+                const point1 = Flags[flagName];
+                const flagName2 =  parseFlagFromArray(visibleFlags[1].cmd.p);
+                const point2 = Flags[flagName];
+            } else if (visibleFlags.length === 1) {
+            //    x = flag.x - point.x
             }
         }
     }

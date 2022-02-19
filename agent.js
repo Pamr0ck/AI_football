@@ -15,29 +15,29 @@ const Flags = {
     fb0: {x: 0, y: -39}, fbr10: {x: 10, y: -39},
     fbr20: {x: 20, y: -39}, fbr30: {x: 30, y: -39},
     fbr40: {x: 40, y: -39}, fbr50: {x: 50, y: -39},
-    flt30: {x:-57.5, y: 30}, flt20: {x:-57.5, y: 20},
-    flt10: {x:-57.5, y: 10}, fl0: {x:-57.5, y: 0},
-    flb10: {x:-57.5, y: -10}, flb20: {x:-57.5, y: -20},
-    flb30: {x:-57.5, y: -30}, frt30: {x: 57.5, y: 30},
+    flt30: {x: -57.5, y: 30}, flt20: {x: -57.5, y: 20},
+    flt10: {x: -57.5, y: 10}, fl0: {x: -57.5, y: 0},
+    flb10: {x: -57.5, y: -10}, flb20: {x: -57.5, y: -20},
+    flb30: {x: -57.5, y: -30}, frt30: {x: 57.5, y: 30},
     frt20: {x: 57.5, y: 20}, frt10: {x: 57.5, y: 10},
     fr0: {x: 57.5, y: 0}, frb10: {x: 57.5, y: -10},
     frb20: {x: 57.5, y: -20}, frb30: {x: 57.5, y: -30},
-    fglt: {x:-52.5, y: 7.01}, fglb: {x:-52.5, y:-7.01},
-    gl: {x:-52.5, y: 0}, gr: {x: 52.5, y: 0}, fc: {x: 0, y: 0},
+    fglt: {x: -52.5, y: 7.01}, fglb: {x: -52.5, y: -7.01},
+    gl: {x: -52.5, y: 0}, gr: {x: 52.5, y: 0}, fc: {x: 0, y: 0},
     fplt: {x: -36, y: 20.15}, fplc: {x: -36, y: 0},
-    fplb: {x: -36, y:-20.15}, fgrt: {x: 52.5, y: 7.01},
-    fgrb: {x: 52.5, y:-7.01}, fprt: {x: 36, y: 20.15},
-    fprc: {x: 36, y: 0}, fprb: {x: 36, y:-20.15},
-    flt: {x:-52.5, y: 34}, fct: {x: 0, y: 34},
-    frt: {x: 52.5, y: 34}, flb: {x:-52.5, y: -34},
+    fplb: {x: -36, y: -20.15}, fgrt: {x: 52.5, y: 7.01},
+    fgrb: {x: 52.5, y: -7.01}, fprt: {x: 36, y: 20.15},
+    fprc: {x: 36, y: 0}, fprb: {x: 36, y: -20.15},
+    flt: {x: -52.5, y: 34}, fct: {x: 0, y: 34},
+    frt: {x: 52.5, y: 34}, flb: {x: -52.5, y: -34},
     fcb: {x: 0, y: -34}, frb: {x: 52.5, y: -34},
     distance(p1, p2) {
-        return Math.sqrt((p1.x-p2.x)**2+(p1.y-p2.y)**2)
+        return Math.sqrt((p1.x - p2.x) ** 2 + (p1.y - p2.y) ** 2)
     },
 }
 
 const parseFlagFromArray = (flagArray) => {
-    return flagArray.reduce((acc, curr)=> acc + curr ,'')
+    return flagArray.reduce((acc, curr) => acc + curr, '')
 }
 
 // Подключение модуля ввода из командной строки
@@ -94,9 +94,8 @@ class Agent {
     analyzeEnv(msg, cmd, p) { // Анализ сообщения
 
         if (cmd === 'sense_body') {
-            for (const sense of p.filter(x=>x.cmd)){
+            for (const sense of p.filter(x => x.cmd)) {
                 this.sense_body[sense.cmd] = sense.p;
-                console.log(this.sense_body)
             }
         }
 
@@ -104,11 +103,11 @@ class Agent {
             const visibleFlags = p.filter(x => x.cmd && (x.cmd.p[0] === 'f' || x.cmd.p[0] === 'g'))
 
             let coords = undefined;
-
+            coords = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])
             if (visibleFlags > 3) {
 
             } else if (visibleFlags.length === 2) {
-                let point = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])
+                coords = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])
             } else if (visibleFlags.length === 1) {
                 coords = this.orientationWithOneFlag(visibleFlags[0]);
             }
@@ -135,15 +134,15 @@ class Agent {
         const angle = flag.p[1] + this.sense_body.turn[0];
         const flag_coord = Flags[parseFlagFromArray(flag.cmd.p)];
 
-        const loc_x = dist* Math.cos(angle* Math.PI /180);
-        const loc_y = dist* Math.sin(angle* Math.PI /180);
+        const loc_x = dist * Math.cos(angle * Math.PI / 180);
+        const loc_y = dist * Math.sin(angle * Math.PI / 180);
 
         // console.log(flag_coord, loc_x, loc_y);
 
         const x = flag_coord.x - loc_x;
         const y = flag_coord.y - loc_y;
 
-        return {x,y};
+        return {x, y};
     }
 
     orientationWithTwoFlag(flag1, flag2) {
@@ -151,19 +150,40 @@ class Agent {
         const d2 = flag2.p[0]
         const angle1 = flag1.p[1] + this.sense_body.turn[0]
         const angle2 = flag2.p[1] + this.sense_body.turn[0]
-        const flagName1 =  parseFlagFromArray(flag1.cmd.p);
+        const flagName1 = parseFlagFromArray(flag1.cmd.p);
         const point1 = Flags[flagName1];
-        const flagName2 =  parseFlagFromArray(flag2.cmd.p);
+        const flagName2 = parseFlagFromArray(flag2.cmd.p);
         const point2 = Flags[flagName2];
-        let x, y;
+        const alpha = (point1.y - point2.y) / (point2.x - point1.x)
 
+        const beta = (
+            point2.y ** 2 - point1.y ** 2 +
+            point2.x ** 2 - point2.x ** 2 +
+            d1 ** 2 - d2 ** 2
+        ) / (2 * (point2.x - point1.x))
+        let x, y, a, b, c;
+        a = alpha ** 2 + 1
+        b = -2 * (alpha * (point1.x - beta) + point1.y)
+
+        c = (point1.x - beta) ** 2 + point1.y ** 2 - d1 ** 2
+        // console.log(c)
+        let D = b ** 2 - 4 * a * c
+        if (D < 0) {
+            return
+        }
+        y = -b + Math.sqrt(D)
+        console.log(Math.sqrt(b ** 2 - 4 * a * c))
+        // console.log(`y1 ${y} | y2 ${-b - Math.sqrt(b** 2 - 4 * a * c)}`)
+        x = point1.x + Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
+        // console.log(`x1 ${x} | x2 ${point1.x + Math.sqrt(d1**2 - (y - (-b - Math.sqrt(b** 2 - 4 * a * c))) ** 2)}`)
+        // console.log(x, point1.x - Math.sqrt(d1**2 - (y - point1.y) ** 2))
         if (point1.x === point2.x)
-            y = (point2.y ** 2 - point1.y**2 + flag1.p[0] ** 2 - flag2.p[0] ** 2)/(2*(point2.y - point1.y))
+            y = (point2.y ** 2 - point1.y ** 2 + flag1.p[0] ** 2 - flag2.p[0] ** 2) / (2 * (point2.y - point1.y))
         if (point1.y === point2.y)
-            x = (point2.x ** 2 - point1.x**2 + flag1.p[0] ** 2 - flag2.p[0] ** 2)/(2*(point2.x - point1.x))
+            x = (point2.x ** 2 - point1.x ** 2 + flag1.p[0] ** 2 - flag2.p[0] ** 2) / (2 * (point2.x - point1.x))
 
 
-        return 'AAAAAAAA'
+        return {x, y}
     }
 
     orientationWithThreeFlag(flag) {

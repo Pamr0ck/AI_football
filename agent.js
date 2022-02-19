@@ -96,6 +96,7 @@ class Agent {
         if (cmd === 'sense_body') {
             for (const sense of p.filter(x=>x.cmd)){
                 this.sense_body[sense.cmd] = sense.p;
+                console.log(this.sense_body)
             }
         }
 
@@ -107,11 +108,7 @@ class Agent {
             if (visibleFlags > 3) {
 
             } else if (visibleFlags.length === 2) {
-                const flagName =  parseFlagFromArray(visibleFlags[0].cmd.p);
-                console.log(Flags[flagName]);
-                const point1 = Flags[flagName];
-                const flagName2 =  parseFlagFromArray(visibleFlags[1].cmd.p);
-                const point2 = Flags[flagName];
+                let point = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])
             } else if (visibleFlags.length === 1) {
                 coords = this.orientationWithOneFlag(visibleFlags[0]);
             }
@@ -147,6 +144,30 @@ class Agent {
         const y = flag_coord.y - loc_y;
 
         return {x,y};
+    }
+
+    orientationWithTwoFlag(flag1, flag2) {
+        const d1 = flag1.p[0]
+        const d2 = flag2.p[0]
+        const angle1 = flag1.p[1] + this.sense_body.turn[0]
+        const angle2 = flag2.p[1] + this.sense_body.turn[0]
+        const flagName1 =  parseFlagFromArray(flag1.cmd.p);
+        const point1 = Flags[flagName1];
+        const flagName2 =  parseFlagFromArray(flag2.cmd.p);
+        const point2 = Flags[flagName2];
+        let x, y;
+
+        if (point1.x === point2.x)
+            y = (point2.y ** 2 - point1.y**2 + flag1.p[0] ** 2 - flag2.p[0] ** 2)/(2*(point2.y - point1.y))
+        if (point1.y === point2.y)
+            x = (point2.x ** 2 - point1.x**2 + flag1.p[0] ** 2 - flag2.p[0] ** 2)/(2*(point2.x - point1.x))
+
+
+        return 'AAAAAAAA'
+    }
+
+    orientationWithThreeFlag(flag) {
+
     }
 }
 

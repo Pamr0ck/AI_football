@@ -166,27 +166,28 @@ class Agent {
         b = -2 * (alpha * (point1.x - beta) + point1.y)
 
         c = (point1.x - beta) ** 2 + point1.y ** 2 - d1 ** 2
-        // console.log(c)
         let D = b ** 2 - 4 * a * c
-        if (D < 0) {
-            return
-        }
         y = -b + Math.sqrt(D)
-        console.log('sqrt', Math.sqrt(D))
-        console.log(`y1 ${(y)} | y2 ${-b - Math.sqrt(D)}`)
-        console.log(`x1 ${x} | x2 ${ point1.x - Math.sqrt(d1 ** 2 - ((-b - Math.sqrt(D)) - point1.y) ** 2)}`)
-
+        if (y > 32  || y < - 32) {
+            y = -b - Math.sqrt(D)
+        }
         x = point1.x + Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
-        console.log(` x1 ${x} | x2 ${ point1.x - Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)}`)
 
+        if (x > 54  || x < -55) {
+            x = point1.x - Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
+        }
         if (point1.x === point2.x) {
-            y = (point2.y ** 2 - point1.y ** 2 + flag1.p[0] ** 2 - flag2.p[0] ** 2) / (2 * (point2.y - point1.y))
-
+            y = -(point2.y ** 2 - point1.y ** 2 + flag1.p[0] ** 2 - flag2.p[0] ** 2) / (2 * (point2.y - point1.y))
+            x = point1.x + Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
+            if (x > 54  || x < -55) {
+                x = point1.x - Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
+            }
         }
         if (point1.y === point2.y) {
             x = (point2.x ** 2 - point1.x ** 2 + flag1.p[0] ** 2 - flag2.p[0] ** 2) / (2 * (point2.x - point1.x))
         }
 
+        x = -x
 
         console.log('result', {x, y})
         return {x, y}

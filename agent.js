@@ -46,6 +46,7 @@ class Agent {
         this.position = "l" // По умолчанию - левая половина поля
         this.run = false // Игра начата
         this.act = null // Действия
+        this.play_on = false //
         this.rl = readline.createInterface({ // Чтение консоли
             input: process.stdin,
             output: process.stdout
@@ -80,8 +81,12 @@ class Agent {
         let data = Msg.parseMsg(msg) // Разбор сообщения
         if (!data) throw new Error("Parse error\n" + msg)
         // Первое (hear) - начало игры
-        if (data.cmd == "hear") this.run = true
-        if (data.cmd == "init") this.initAgent(data.p)//Инициализация
+        if (data.cmd === "hear")  {
+            if (!this.run)
+                if (data.p[1] === 'referee' && data.p[2] === 'play_on') {}
+            this.play_on = true
+        }
+        if (data.cmd === "init") this.initAgent(data.p)//Инициализация
         this.analyzeEnv(data.msg, data.cmd, data.p) // Обработка
     }
 
@@ -131,7 +136,46 @@ class Agent {
         }
     }
 
+    orientationWithTwoFlag(flag1, flag2) {
+        const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)];
+        const {x:x2, y:y2} = Flags[parseFlagFromArray(flag2.cmd.p)];
+        const d1 = flag1.p[0]
+        const d2 = flag2.p[0]
+
+        const alpha = (y1 - y2) / (x2 - x1)
+        const beta = (y2 ** 2 - y1 ** 2 + x2 ** 2 - x1 ** 2 + d1 ** 2 - d2 ** 2) /
+            (2 * (x2 - x1))
+
+        let x, y, a, b, c;
+
+        a = alpha ** 2 + 1
+        b = -2 * (alpha * (x1 - beta) + y1)
+        c = (x1 - beta) ** 2 + y1 ** 2 - d1 ** 2
+        let D = b ** 2 - 4 * a * c
+
+        if (x1 === x2) {
+            y = -(y2 ** 2 - y1 ** 2 + d1 ** 2 - d2 ** 2) / (2 * (y2 - y1))
+        } else {
+            y = (-b + Math.sqrt(D))/(2*a)
+            if (y >= 34  || y <= - 34) {
+                y = (-b - Math.sqrt(D))/(2*a)
+            }
+
+        }
+        if (y1 === y2) {
+            x = (x2 ** 2 - x1 ** 2 + d1 ** 2 - d2 ** 2) / (2 * (x2 - x1))
+        } else {
+            x = x1 + Math.sqrt(d1 ** 2 - (y - y1) ** 2)
+            if (x >= 54  || x <= -55) {
+                x = x1 - Math.sqrt(d1 ** 2 - (y - y1) ** 2)
+            }
+        }
+        x = -x
+        y = -y
+        return {x, y}
+    }
     // flag: { p: [ 67.4, -8 ], cmd: { p: [ 'f', 'r', 't', 10 ] } }
+
     orientationWithOneFlag(flag) {
         const dist = flag.p[0];
         const angle = flag.p[1] + this.sense_body.turn[0];
@@ -147,43 +191,6 @@ class Agent {
         const y = -flag_coord.y - loc_y;
 
         return {x, y};
-    }
-
-    orientationWithTwoFlag(flag1, flag2) {
-        const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)];
-        const {x:x2, y:y2} = Flags[parseFlagFromArray(flag2.cmd.p)];
-        const d1 = flag1.p[0]
-        const d2 = flag2.p[0]
-
-        const alpha = (y1 - y2) / (x2 - x1)
-        const beta = (y2 ** 2 - y1 ** 2 + x2 ** 2 - x1 ** 2 + d1 ** 2 - d2 ** 2) /
-            (2 * (x2 - x1))
-
-        let x, y, a, b, c;
-
-        a = alpha ** 2 + 1
-        b = -2 * (alpha * (x1 - beta) + y1)
-
-        c = (x1 - beta) ** 2 + y1 ** 2 - d1 ** 2
-        let D = b ** 2 - 4 * a * c
-        y = -b + Math.sqrt(D)
-        if (y > 32  || y < - 32) {
-            y = -b - Math.sqrt(D)
-        }
-
-        if (x1 === x2) {
-            y = -(y2 ** 2 - y1 ** 2 + d1 ** 2 - d2 ** 2) / (2 * (y2 - y1))
-        }
-        x = x1 + Math.sqrt(d1 ** 2 - (y - y1) ** 2)
-        if (x > 54  || x < -55) {
-            x = x1 - Math.sqrt(d1 ** 2 - (y - y1) ** 2)
-        }
-        if (y1 === y2) {
-            x = (x2 ** 2 - x1 ** 2 + d1 ** 2 - d2 ** 2) / (2 * (x2 - x1))
-        }
-
-        x = -x
-        return {x, y}
     }
 
     orientationWithThreeFlag(flag1, flag2, flag3) {

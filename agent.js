@@ -98,11 +98,13 @@ class Agent {
                 this.sense_body[sense.cmd] = sense.p;
             }
         }
-
+        // console.log(msg, cmd, p)
         if (cmd === 'see') {
             const visibleFlags = p.filter(x => x.cmd && (x.cmd.p[0] === 'f' || x.cmd.p[0] === 'g'))
 
             let coords = undefined;
+            coords = this.orientationWithOneFlag(visibleFlags[0]);
+            console.log('one', coords);
             coords = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])
             if (visibleFlags > 3) {
 
@@ -140,7 +142,7 @@ class Agent {
         // console.log(flag_coord, loc_x, loc_y);
 
         const x = flag_coord.x - loc_x;
-        const y = flag_coord.y - loc_y;
+        const y = -flag_coord.y - loc_y;
 
         return {x, y};
     }
@@ -148,8 +150,6 @@ class Agent {
     orientationWithTwoFlag(flag1, flag2) {
         const d1 = flag1.p[0]
         const d2 = flag2.p[0]
-        const angle1 = flag1.p[1] + this.sense_body.turn[0]
-        const angle2 = flag2.p[1] + this.sense_body.turn[0]
         const flagName1 = parseFlagFromArray(flag1.cmd.p);
         const point1 = Flags[flagName1];
         const flagName2 = parseFlagFromArray(flag2.cmd.p);
@@ -158,7 +158,7 @@ class Agent {
 
         const beta = (
             point2.y ** 2 - point1.y ** 2 +
-            point2.x ** 2 - point2.x ** 2 +
+            point2.x ** 2 - point1.x ** 2 +
             d1 ** 2 - d2 ** 2
         ) / (2 * (point2.x - point1.x))
         let x, y, a, b, c;
@@ -172,17 +172,23 @@ class Agent {
             return
         }
         y = -b + Math.sqrt(D)
-        console.log(Math.sqrt(b ** 2 - 4 * a * c))
-        // console.log(`y1 ${y} | y2 ${-b - Math.sqrt(b** 2 - 4 * a * c)}`)
+        console.log('sqrt', Math.sqrt(D))
+        console.log(`y1 ${(y)} | y2 ${-b - Math.sqrt(D)}`)
+        console.log(`x1 ${x} | x2 ${ point1.x - Math.sqrt(d1 ** 2 - ((-b - Math.sqrt(D)) - point1.y) ** 2)}`)
+
         x = point1.x + Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
-        // console.log(`x1 ${x} | x2 ${point1.x + Math.sqrt(d1**2 - (y - (-b - Math.sqrt(b** 2 - 4 * a * c))) ** 2)}`)
-        // console.log(x, point1.x - Math.sqrt(d1**2 - (y - point1.y) ** 2))
-        if (point1.x === point2.x)
+        console.log(` x1 ${x} | x2 ${ point1.x - Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)}`)
+
+        if (point1.x === point2.x) {
             y = (point2.y ** 2 - point1.y ** 2 + flag1.p[0] ** 2 - flag2.p[0] ** 2) / (2 * (point2.y - point1.y))
-        if (point1.y === point2.y)
+
+        }
+        if (point1.y === point2.y) {
             x = (point2.x ** 2 - point1.x ** 2 + flag1.p[0] ** 2 - flag2.p[0] ** 2) / (2 * (point2.x - point1.x))
+        }
 
 
+        console.log('result', {x, y})
         return {x, y}
     }
 

@@ -171,25 +171,19 @@ class Agent {
         if (y > 32  || y < - 32) {
             y = -b - Math.sqrt(D)
         }
-        x = point1.x + Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
 
-        if (x > 54  || x < -55) {
-            x = point1.x - Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
-        }
         if (point1.x === point2.x) {
             y = -(point2.y ** 2 - point1.y ** 2 + flag1.p[0] ** 2 - flag2.p[0] ** 2) / (2 * (point2.y - point1.y))
-            x = point1.x + Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
-            if (x > 54  || x < -55) {
-                x = point1.x - Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
-            }
+        }
+        x = point1.x + Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
+        if (x > 54  || x < -55) {
+            x = point1.x - Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
         }
         if (point1.y === point2.y) {
             x = (point2.x ** 2 - point1.x ** 2 + flag1.p[0] ** 2 - flag2.p[0] ** 2) / (2 * (point2.x - point1.x))
         }
 
         x = -x
-
-        console.log('result', {x, y})
         return {x, y}
     }
 

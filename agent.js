@@ -61,6 +61,7 @@ class Agent {
             }
         })
         this.sense_body = {}
+        this.coords = {}
     }
 
     msgGot(msg) { // Получение сообщения
@@ -110,12 +111,9 @@ class Agent {
         }
         if (cmd === 'see') {
             const visibleFlags = p.filter(x => x.cmd && (x.cmd.p[0] === 'f' || x.cmd.p[0] === 'g'))
+            const visiblePlayers = p.filter(x => x.cmd && (x.cmd.p[0] === 'p'))
 
             let coords = undefined;
-            coords = this.orientationWithOneFlag(visibleFlags[0]);
-            console.log('one', coords);
-            coords = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])
-            console.log('two', coords);
 
             if (visibleFlags.length >= 3) {
                 coords = this.orientationWithThreeFlag(visibleFlags[0],visibleFlags[1],visibleFlags[2])
@@ -125,7 +123,14 @@ class Agent {
                 coords = this.orientationWithOneFlag(visibleFlags[0]);
             }
 
-            console.log('three',coords);
+            this.coords = coords;
+            console.log('my coords:', coords?.x, coords?.y);
+
+            visiblePlayers.forEach((player)=>{
+                const coords = this.orientationWithThreeFlag(this.getFlagsFromObject(player, visibleFlags.slice(2)));
+
+                console.log('Other player coords:', coords.x, coords.y);
+            })
         }
     }
 
@@ -215,13 +220,10 @@ class Agent {
         let answer = undefined;
 
         if(x1 === x2 || y1===y2 ){
-            console.log('pizda 1')
             answer= this.orientationWithTwoFlag(flag1, flag3);
         } else if (x1===x3 || y1 === y3){
-            console.log('pizda 2')
             answer= this.orientationWithTwoFlag(flag2, flag3);
         } else if (x2===x3 || y2 === y3){
-            console.log('pizda 3', x1, x2, x3, y1, y2, y3)
             answer= this.orientationWithTwoFlag(flag1, flag2);
         }else {
             const alpha1 = (y1 - y2) / (x2 - x1)
@@ -238,6 +240,23 @@ class Agent {
             answer = {x,y};
         }
         return answer;
+    }
+
+    getFlagsFromObject(object, flags){
+        const result = [object];
+        flags.forEach((flag)=>{
+            const d1 = object.p[0];
+            const d2 = flag.p[0];
+            const distanceBetweenObjectAndFlag = Math.sqrt(
+                d1 ** 2 +
+                d2 ** 2 -
+                2 * d1 * d2 * Math.cos(Math.abs(object.p[1] - flag.p[1])*Math.PI/180)
+            )
+            const customFlag = flag;
+            customFlag.p[0] = distanceBetweenObjectAndFlag;
+            result.push(customFlag);
+        });
+        return result;
     }
 
 

@@ -127,7 +127,7 @@ class Agent {
             console.log('my coords:', coords?.x, coords?.y);
 
             visiblePlayers.forEach((player)=>{
-                const coords = this.orientationWithThreeFlag(this.getFlagsFromObject(player, visibleFlags.slice(2)));
+                const coords = this.orientationWithThreeFlag(this.getFlagsFromObject(player, visibleFlags.slice(1)));
 
                 console.log('Other player coords:', coords.x, coords.y);
             })

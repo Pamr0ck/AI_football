@@ -83,11 +83,16 @@ class Agent {
         // Первое (hear) - начало игры
         if (data.cmd === "hear")  {
             if (!this.run)
-                if (data.p[1] === 'referee' && data.p[2] === 'play_on') {}
-            this.play_on = true
+                if (data.p[1] === 'referee' && data.p[2] === 'play_on') {
+                    this.play_on = true
+                }
         }
         if (data.cmd === "init") this.initAgent(data.p)//Инициализация
         this.analyzeEnv(data.msg, data.cmd, data.p) // Обработка
+
+        if (data.cmd === 'turn') {
+
+        }
     }
 
     initAgent(p) {
@@ -134,6 +139,12 @@ class Agent {
             }
             this.act = null // Сброс команды
         }
+    }
+
+    speen() {
+        setInterval(() => {
+            console.log('YOU SPEEN ME LIKE AROUND')
+        }, 100)
     }
 
     orientationWithTwoFlag(flag1, flag2) {

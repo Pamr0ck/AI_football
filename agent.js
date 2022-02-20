@@ -98,7 +98,6 @@ class Agent {
                 this.sense_body[sense.cmd] = sense.p;
             }
         }
-        // console.log(msg, cmd, p)
         if (cmd === 'see') {
             const visibleFlags = p.filter(x => x.cmd && (x.cmd.p[0] === 'f' || x.cmd.p[0] === 'g'))
 
@@ -106,15 +105,17 @@ class Agent {
             coords = this.orientationWithOneFlag(visibleFlags[0]);
             console.log('one', coords);
             coords = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])
+            console.log('two', coords);
+
             if (visibleFlags.length >= 3) {
-                this.orientationWithThreeFlag(visibleFlags[0],visibleFlags[1],visibleFlags[2])
+                coords = this.orientationWithThreeFlag(visibleFlags[0],visibleFlags[1],visibleFlags[2])
             } else if (visibleFlags.length === 2) {
                 coords = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])
             } else if (visibleFlags.length === 1) {
                 coords = this.orientationWithOneFlag(visibleFlags[0]);
             }
 
-            console.log(coords);
+            console.log('three',coords);
         }
     }
 
@@ -141,6 +142,7 @@ class Agent {
 
         // console.log(flag_coord, loc_x, loc_y);
 
+        // TODO if r then minus flagcoord
         const x = flag_coord.x - loc_x;
         const y = -flag_coord.y - loc_y;
 
@@ -148,39 +150,36 @@ class Agent {
     }
 
     orientationWithTwoFlag(flag1, flag2) {
+        const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)];
+        const {x:x2, y:y2} = Flags[parseFlagFromArray(flag2.cmd.p)];
         const d1 = flag1.p[0]
         const d2 = flag2.p[0]
-        const flagName1 = parseFlagFromArray(flag1.cmd.p);
-        const point1 = Flags[flagName1];
-        const flagName2 = parseFlagFromArray(flag2.cmd.p);
-        const point2 = Flags[flagName2];
-        const alpha = (point1.y - point2.y) / (point2.x - point1.x)
 
-        const beta = (
-            point2.y ** 2 - point1.y ** 2 +
-            point2.x ** 2 - point1.x ** 2 +
-            d1 ** 2 - d2 ** 2
-        ) / (2 * (point2.x - point1.x))
+        const alpha = (y1 - y2) / (x2 - x1)
+        const beta = (y2 ** 2 - y1 ** 2 + x2 ** 2 - x1 ** 2 + d1 ** 2 - d2 ** 2) /
+            (2 * (x2 - x1))
+
         let x, y, a, b, c;
-        a = alpha ** 2 + 1
-        b = -2 * (alpha * (point1.x - beta) + point1.y)
 
-        c = (point1.x - beta) ** 2 + point1.y ** 2 - d1 ** 2
+        a = alpha ** 2 + 1
+        b = -2 * (alpha * (x1 - beta) + y1)
+
+        c = (x1 - beta) ** 2 + y1 ** 2 - d1 ** 2
         let D = b ** 2 - 4 * a * c
         y = -b + Math.sqrt(D)
         if (y > 32  || y < - 32) {
             y = -b - Math.sqrt(D)
         }
 
-        if (point1.x === point2.x) {
-            y = -(point2.y ** 2 - point1.y ** 2 + flag1.p[0] ** 2 - flag2.p[0] ** 2) / (2 * (point2.y - point1.y))
+        if (x1 === x2) {
+            y = -(y2 ** 2 - y1 ** 2 + d1 ** 2 - d2 ** 2) / (2 * (y2 - y1))
         }
-        x = point1.x + Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
+        x = x1 + Math.sqrt(d1 ** 2 - (y - y1) ** 2)
         if (x > 54  || x < -55) {
-            x = point1.x - Math.sqrt(d1 ** 2 - (y - point1.y) ** 2)
+            x = x1 - Math.sqrt(d1 ** 2 - (y - y1) ** 2)
         }
-        if (point1.y === point2.y) {
-            x = (point2.x ** 2 - point1.x ** 2 + flag1.p[0] ** 2 - flag2.p[0] ** 2) / (2 * (point2.x - point1.x))
+        if (y1 === y2) {
+            x = (x2 ** 2 - x1 ** 2 + d1 ** 2 - d2 ** 2) / (2 * (x2 - x1))
         }
 
         x = -x
@@ -194,6 +193,33 @@ class Agent {
         const d1 = flag1.p[0];
         const d2 = flag2.p[0];
         const d3 = flag3.p[0];
+
+        let answer = undefined;
+
+        if(x1 === x2 || y1===y2 ){
+            console.log('pizda 1')
+            answer= this.orientationWithTwoFlag(flag1, flag3);
+        } else if (x1===x3 || y1 === y3){
+            console.log('pizda 2')
+            answer= this.orientationWithTwoFlag(flag2, flag3);
+        } else if (x2===x3 || y2 === y3){
+            console.log('pizda 3', x1, x2, x3, y1, y2, y3)
+            answer= this.orientationWithTwoFlag(flag1, flag2);
+        }else {
+            const alpha1 = (y1 - y2) / (x2 - x1)
+            const alpha2 = (y1 - y3) / (x3 - x1)
+
+            const beta1 = (y2 ** 2 - y1 ** 2 + x2 ** 2 - x1 ** 2 + d1 ** 2 - d2 ** 2) /
+                (2 * (x2 - x1))
+            const beta2 = (y3 ** 2 - y1 ** 2 + x3 ** 2 - x1 ** 2 + d1 ** 2 - d3 ** 2) /
+                (2 * (x3 - x1))
+
+            const y = (beta1 - beta2) / (alpha2 - alpha1)
+            const x = alpha1 * y + beta1
+
+            answer = {x,y};
+        }
+        return answer;
     }
 
 

@@ -90,14 +90,12 @@ class Agent {
         }
         if (data.cmd === "init") this.initAgent(data.p)//Инициализация
         this.analyzeEnv(data.msg, data.cmd, data.p) // Обработка
-
-        if (data.cmd === 'turn') {
-
-        }
     }
 
     initAgent(p) {
         if (p[0] == "r") this.position = "r" // Правая половина поля
+        else if (p[0] == "l") this.position = "l" // Левая половина поля
+
         if (p[1]) this.id = p[1] // id игрока
     }
 
@@ -146,10 +144,13 @@ class Agent {
         }
     }
 
-    speen() {
+    speen(speed) {
         setInterval(() => {
             console.log('YOU SPEEN ME LIKE AROUND')
-        }, 100)
+            if (this.play_on) {
+                this.act = {n: "turn", v: speed}
+            }
+        }, 1000)
     }
 
     orientationWithTwoFlag(flag1, flag2) {

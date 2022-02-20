@@ -15,15 +15,18 @@ function getData() {
     rl.question("Введите координату X вашего игрока:", (x) => {
         rl.question("Введите координату Y вашего игрока:", (y) => {
             rl.question("Название вашей команды:", (teamName) => {
-                rl.question("Введите координату X противника:", (x_p) => {
-                    rl.question("Введите координату Y противника:", (y_p) => {
-                        rl.question("Название вашей команды противника:", (teamName_p) => {
-                            agent1 = createAgent(teamName, x, y)
-                            agent2 = createAgent(teamName_p, x_p, y_p)
+                rl.question("скорость поворота:", (speed) => {
+                    rl.question("Введите координату X противника:", (x_p) => {
+                        rl.question("Введите координату Y противника:", (y_p) => {
+                            rl.question("Название вашей команды противника:", (teamName_p) => {
+                                agent1 = createAgent(teamName, x, y)
+                                agent2 = createAgent(teamName_p, x_p, y_p)
 
-                            // agent1.speen()
+                                agent1.speen(speed)
+                            })
                         })
                     })
+
                 })
             })
         })

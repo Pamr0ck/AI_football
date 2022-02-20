@@ -42,11 +42,12 @@ const parseFlagFromArray = (flagArray) => {
 
 // Подключение модуля ввода из командной строки
 class Agent {
-    constructor() {
+    constructor(teamName) {
         this.position = "l" // По умолчанию - левая половина поля
         this.run = false // Игра начата
         this.act = null // Действия
         this.play_on = false //
+        this.teamName = teamName
         this.rl = readline.createInterface({ // Чтение консоли
             input: process.stdin,
             output: process.stdout
@@ -114,6 +115,7 @@ class Agent {
 
             let coords = undefined;
 
+            //TODO разобраться с NAN
             if (visibleFlags.length >= 3) {
                 coords = this.orientationWithThreeFlag(visibleFlags[0],visibleFlags[1],visibleFlags[2])
             } else if (visibleFlags.length === 2) {
@@ -123,7 +125,7 @@ class Agent {
             }
 
             this.coords = coords;
-            console.log('my coords:', coords?.x, coords?.y);
+            console.log(this.teamName, 'my coords:', coords?.x, coords?.y);
 
             visiblePlayers.forEach((player)=>{
                 const coords = this.orientationWithThreeFlag(...this.getFlagsFromObject(player, visibleFlags.slice(1)));
@@ -135,6 +137,7 @@ class Agent {
 
     sendCmd() {
         if (this.run) { // Игра начата
+            console.log('runned')
             if (this.act) { // Есть команда от игрока
                 if (this.act.n == "kick") // Пнуть мяч
                     this.socketSend(this.act.n, this.act.v + " 0")
@@ -147,11 +150,10 @@ class Agent {
 
     speen(speed) {
         setInterval(() => {
-            console.log('YOU SPEEN ME LIKE AROUND')
             if (this.play_on) {
-                this.act = {n: "turn", v: speed}
+                this.socketSend("turn", `${speed}`)
             }
-        }, 1000)
+        }, 500)
     }
 
     orientationWithTwoFlag(flag1, flag2) {

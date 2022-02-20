@@ -5,7 +5,7 @@ const VERSION = 7 // Версия сервера
 // agent.socketSend('kick', '100 100')
 
 function createAgent(teamName, x, y) {
-    let agent = new Agent()
+    let agent = new Agent(teamName)
     require('./socket')(agent, teamName, VERSION) //Настройка сокета
     agent.socketSend("move", `${x} ${y}`) // Размещение игрока на поле
     return agent

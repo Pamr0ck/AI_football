@@ -106,8 +106,8 @@ class Agent {
             coords = this.orientationWithOneFlag(visibleFlags[0]);
             console.log('one', coords);
             coords = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])
-            if (visibleFlags > 3) {
-
+            if (visibleFlags.length >= 3) {
+                this.orientationWithThreeFlag(visibleFlags[0],visibleFlags[1],visibleFlags[2])
             } else if (visibleFlags.length === 2) {
                 coords = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])
             } else if (visibleFlags.length === 1) {
@@ -192,9 +192,16 @@ class Agent {
         return {x, y}
     }
 
-    orientationWithThreeFlag(flag) {
-
+    orientationWithThreeFlag(flag1, flag2, flag3) {
+        const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)];
+        const {x:x2, y:y2} = Flags[parseFlagFromArray(flag2.cmd.p)];
+        const {x:x3, y:y3} = Flags[parseFlagFromArray(flag3.cmd.p)];
+        const d1 = flag1.p[0];
+        const d2 = flag2.p[0];
+        const d3 = flag3.p[0];
     }
+
+
 }
 
 module.exports = Agent // Экспорт игрока

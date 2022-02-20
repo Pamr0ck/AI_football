@@ -62,6 +62,7 @@ class Agent {
         })
         this.sense_body = {}
         this.coords = {}
+        this.position = 'l';
     }
 
     msgGot(msg) { // Получение сообщения
@@ -125,7 +126,7 @@ class Agent {
             console.log('my coords:', coords?.x, coords?.y);
 
             visiblePlayers.forEach((player)=>{
-                const coords = this.orientationWithThreeFlag(this.getFlagsFromObject(player, visibleFlags.slice(1)));
+                const coords = this.orientationWithThreeFlag(...this.getFlagsFromObject(player, visibleFlags.slice(1)));
 
                 console.log('Other player coords:', coords.x, coords.y);
             })
@@ -154,7 +155,7 @@ class Agent {
     }
 
     orientationWithTwoFlag(flag1, flag2) {
-        const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)];
+        const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)]?Flags[parseFlagFromArray(flag1.cmd.p)]:{x: flag1.p[0], y: flag2.p[1]};
         const {x:x2, y:y2} = Flags[parseFlagFromArray(flag2.cmd.p)];
         const d1 = flag1.p[0]
         const d2 = flag2.p[0]
@@ -191,7 +192,6 @@ class Agent {
         y = -y
         return {x, y}
     }
-    // flag: { p: [ 67.4, -8 ], cmd: { p: [ 'f', 'r', 't', 10 ] } }
 
     orientationWithOneFlag(flag) {
         const dist = flag.p[0];
@@ -201,17 +201,16 @@ class Agent {
         const loc_x = dist * Math.cos(angle * Math.PI / 180);
         const loc_y = dist * Math.sin(angle * Math.PI / 180);
 
-        // console.log(flag_coord, loc_x, loc_y);
 
         // TODO if r then minus flagcoord
-        const x = flag_coord.x - loc_x;
+        const x = this.position === 'l'? flag_coord.x - loc_x: flag_coord.x + loc_x ;
         const y = -flag_coord.y - loc_y;
 
         return {x, y};
     }
 
     orientationWithThreeFlag(flag1, flag2, flag3) {
-        const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)];
+        const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)]?Flags[parseFlagFromArray(flag1.cmd.p)]:{x: flag1.p[0], y: flag2.p[1]};
         const {x:x2, y:y2} = Flags[parseFlagFromArray(flag2.cmd.p)];
         const {x:x3, y:y3} = Flags[parseFlagFromArray(flag3.cmd.p)];
         const d1 = flag1.p[0];
@@ -244,7 +243,8 @@ class Agent {
     }
 
     getFlagsFromObject(object, flags){
-        const result = [object];
+        const result = [];
+        result.push(object);
         flags.forEach((flag)=>{
             const d1 = object.p[0];
             const d2 = flag.p[0];

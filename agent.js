@@ -172,27 +172,28 @@ class Agent {
         b = -2 * (alpha * (x1 - beta) + y1)
         c = (x1 - beta) ** 2 + y1 ** 2 - d1 ** 2
         let D = b ** 2 - 4 * a * c
-
+        let result = {x:null, y:null};
         if (x1 === x2) {
             y = -(y2 ** 2 - y1 ** 2 + d1 ** 2 - d2 ** 2) / (2 * (y2 - y1))
         } else {
-            y = (-b + Math.sqrt(D))/(2*a)
-            if (y >= 34  || y <= - 34) {
-                y = (-b - Math.sqrt(D))/(2*a)
+            result.y = (-b + Math.sqrt(D))/(2*a)
+            if (result.y >= 34  || result.y <= - 34) {
+                result.y = (-b - Math.sqrt(D))/(2*a)
             }
 
         }
         if (y1 === y2) {
-            x = (x2 ** 2 - x1 ** 2 + d1 ** 2 - d2 ** 2) / (2 * (x2 - x1))
+            return this.whenYSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}], 0, 1)
         } else {
-            x = x1 + Math.sqrt(d1 ** 2 - (y - y1) ** 2)
-            if (x >= 54  || x <= -55) {
-                x = x1 - Math.sqrt(d1 ** 2 - (y - y1) ** 2)
+            result.x = x1 + Math.sqrt(d1 ** 2 - (y - y1) ** 2)
+            if (result.x >= 54  || result.x <= -55) {
+                result.x = x1 - Math.sqrt(d1 ** 2 - (y - y1) ** 2)
             }
         }
-        x = -x
-        y = -y
-        return {x, y}
+        // x = -x
+        // y = -y
+        // return {x, y}
+        return result
     }
 
     orientationWithOneFlag(flag) {

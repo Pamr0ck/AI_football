@@ -128,8 +128,8 @@ class Agent {
             console.log(this.teamName, 'my coords:', coords?.x, coords?.y);
 
             visiblePlayers.forEach((player)=>{
-                const coords = this.orientationWithThreeFlag(...this.getFlagsFromObject(player, visibleFlags.slice(1)));
-
+                let coords = this.orientationWithThreeFlag(...this.getFlagsFromObject(player, visibleFlags.slice(1)));
+                coords.x = -coords.x
                 console.log('Other player coords:', coords.x, coords.y);
             })
         }

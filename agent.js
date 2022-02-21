@@ -116,22 +116,26 @@ class Agent {
             let coords = undefined;
 
             //TODO разобраться с NAN
+            let uefa= 0;
             if (visibleFlags.length >= 3) {
+                uefa= 3;
                 coords = this.orientationWithThreeFlag(visibleFlags[0],visibleFlags[1],visibleFlags[2])
             } else if (visibleFlags.length === 2) {
+                uefa= 2
                 coords = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])
             } else if (visibleFlags.length === 1) {
+                uefa= 1
                 coords = this.orientationWithOneFlag(visibleFlags[0]);
             }
 
             this.coords = coords;
-            console.log(this.teamName, 'my coords:', coords?.x, coords?.y);
+            console.log(this.teamName, uefa, 'my coords:', coords?.x, coords?.y);
 
             visiblePlayers.forEach((player)=>{
                 let coords = this.orientationWithThreeFlag(...this.getFlagsFromObject(player, visibleFlags.slice(1)));
                 // coords.x = coords.x
 
-                console.log('Other player coords:', coords.x, coords.y);
+                console.log('its ' + this.teamName + 'Other player coords:', coords.x, coords.y);
             })
         }
     }
@@ -252,6 +256,10 @@ class Agent {
 
             answer = {x,y};
         }
+
+        if (Math.abs(answer.x)>100 || Math.abs(answer.y)>100){
+            console.log('PIZDA', points)
+        }
         return answer;
     }
 
@@ -282,6 +290,10 @@ class Agent {
         if (index2) {
             const forX1 = Math.abs((xs[0] - points[index2].x)**2 + (y - points[index2].y)**2 - (points[index2].d)**2);
             const forX2 = Math.abs((xs[1] - points[index2].x)**2 + (y - points[index2].y)**2 - (points[index2].d)**2);
+            // if (forX1>100 || forX2>100){
+            //     console.error("PIZDA R",points, xs, y);
+            // }
+            // console.log(forX1, forX2)
             // if (forX1 - forX2 > 0) {
             //     answer = {x: xs[1], y}
             // } else {

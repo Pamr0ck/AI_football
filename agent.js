@@ -303,19 +303,28 @@ class Agent {
         return answer
     }
 
-    whenYSame(points, index1, index2, index3) {
-        const x = ((points[index2].x)**2 - (points[index1].x)**2 + (points[index1].d)**2 - (points[index2].d))**2 / (2 * (points[index2].x - points[index1].x));
+    whenYSame(points, index0, index1, index2) {
+        const x = ((points[index1].x)**2 - (points[index0].x)**2 + (points[index0].d)**2 - (points[index1].d)**2) / (2 * (points[index1].x - points[index0].x));
         const ys = [];
-        ys.push(points[index1].y + Math.sqrt(Math.abs((points[index1].d)**2 - (x - points[index1].x)**2)));
-        ys.push(points[index1].y - Math.sqrt(Math.abs((points[index1].d)**2 - (x - points[index1].x)**2)));
+        ys.push(points[index0].y + Math.sqrt(Math.abs((points[index0].d)**2 - (x - points[index0].x)**2)));
+        ys.push(points[index0].y - Math.sqrt(Math.abs((points[index0].d)**2 - (x - points[index0].x)**2)));
         let answer = null;
-        if (index3) {
-            const forY1 = Math.abs((x - points[index3].x)**2 + (ys[0] - points[index3].y)**2 - (points[index3].d)**2);
-            const forY2 = Math.abs((x - points[index3].x)**2 + (ys[1] - points[index3].y)**2 - (points[index3].d)**2);
-            if (forY1 - forY2 > 0) {
-                answer = {x, y: ys[1]}
-            } else {
+        if (index2) {
+            const forY1 = Math.abs((x - points[index2].x)**2 + (ys[0] - points[index2].y)**2 - (points[index2].d)**2);
+            const forY2 = Math.abs((x - points[index2].x)**2 + (ys[1] - points[index2].y)**2 - (points[index2].d)**2);
+            // if (forY1 - forY2 > 0) {
+            //     answer = {x, y: ys[1]}
+            // } else {
+            //     answer = {x, y: ys[0]}
+            // }
+            if (forY1>100 || forY2>100){
+                console.error("PIZDA Y",points, ys, x);
+                console.log('index', index0, index1, index2)
+            }
+            if (Math.abs(ys[0]) <= 32) {
                 answer = {x, y: ys[0]}
+            } else {
+                answer = {x, y: ys[1]}
             }
         } else {
             if (Math.abs(ys[0]) <= 32) {

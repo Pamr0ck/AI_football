@@ -253,6 +253,17 @@ class Agent {
 
     }
 
+    checkAnswersForTwoFlags(xs, ys) {
+        let answer = null
+        xs.forEach((x, index) => {
+            const ind = (index < 2) ? 0 : 1
+            if (Math.abs(x) <= 54 && Math.abs(ys[ind]) <= 32) {
+                answer = { x, y: ys[ind] }
+            }
+        })
+        return answer
+    }
+
 
     orientationWithThreeFlag(flag1, flag2, flag3) {
         let coords = []
@@ -320,6 +331,7 @@ class Agent {
             answer = {x,y};
         }
         return answer;
+        }
     }
 
     getFlagsFromObject(object, flags){

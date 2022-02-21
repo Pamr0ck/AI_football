@@ -195,7 +195,7 @@ class Agent {
             return this.whenXSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}], 0, 1)
         } else {
             result.y = (-b + Math.sqrt(D))/(2*a)
-            if (result.y >= 34  || result.y <= - 34) {
+            if (Math.abs(result.y) >= 32) {
                 result.y = (-b - Math.sqrt(D))/(2*a)
             }
 
@@ -204,7 +204,7 @@ class Agent {
             return this.whenYSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}], 0, 1)
         } else {
             result.x = x1 + Math.sqrt(d1 ** 2 - (y - y1) ** 2)
-            if (result.x >= 54  || result.x <= -55) {
+            if (Math.abs(result.x) >= 52.5) {
                 result.x = x1 - Math.sqrt(d1 ** 2 - (y - y1) ** 2)
             }
         }
@@ -273,11 +273,11 @@ class Agent {
         return result;
     }
 
-    whenXSame(points, index1, index2, index3) {
-        const y = ((points[index2].y)**2 - (points[index1].y)**2 + (points[index1].d)**2 - (points[index2].d)**2) / (2 * (points[index2].y - points[index1].y));
+    whenXSame(points, index0, index1, index2) {
+        const y = ((points[index1].y)**2 - (points[index0].y)**2 + (points[index0].d)**2 - (points[index1].d)**2) / (2 * (points[index1].y - points[index0].y));
         const xs = [];
-        xs.push(points[index1].x + Math.sqrt(Math.abs((points[index1].d)**2 - (y - points[index1].y)**2)));
-        xs.push(points[index1].x - Math.sqrt(Math.abs((points[index1].d)**2 - (y - points[index1].y)**2)));
+        xs.push(points[index0].x + Math.sqrt(Math.abs((points[index0].d)**2 - (y - points[index0].y)**2)));
+        xs.push(points[index0].x - Math.sqrt(Math.abs((points[index0].d)**2 - (y - points[index0].y)**2)));
         let answer = null;
         if (index2) {
             const forX1 = Math.abs((xs[0] - points[index2].x)**2 + (y - points[index2].y)**2 - (points[index2].d)**2);
@@ -299,6 +299,7 @@ class Agent {
                 answer = {x: xs[1], y}
             }
         }
+
         return answer
     }
 

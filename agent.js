@@ -117,6 +117,7 @@ class Agent {
 
             //TODO разобраться с NAN
             if (visibleFlags.length >= 3) {
+                // coords = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])
                 coords = this.orientationWithThreeFlag(visibleFlags[0],visibleFlags[1],visibleFlags[2])
             } else if (visibleFlags.length === 2) {
                 coords = this.orientationWithTwoFlag(visibleFlags[0], visibleFlags[1])

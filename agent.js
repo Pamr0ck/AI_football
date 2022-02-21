@@ -129,7 +129,7 @@ class Agent {
 
             visiblePlayers.forEach((player)=>{
                 let coords = this.orientationWithThreeFlag(...this.getFlagsFromObject(player, visibleFlags.slice(1)));
-                coords.x = -coords.x
+                // coords.x = coords.x
 
                 console.log('Other player coords:', coords.x, coords.y);
             })

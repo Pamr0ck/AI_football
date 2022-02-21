@@ -224,19 +224,19 @@ class Agent {
         const d3 = flag3.p[0];
 
         let answer = undefined;
-
+        const points = [{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}, {x:x3,y:y3,d:d3}];
         if(x1 === x2){
-            answer = this.whenXSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}, {x:x3,y:y3,d:d3}], 0, 1, 2)
+            answer = this.whenXSame(points, 0, 1, 2)
         } else if (x1===x3){
-            answer = this.whenXSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}, {x:x3,y:y3,d:d3}], 0, 2, 1);
+            answer = this.whenXSame(points, 0, 2, 1);
         } else if (x2===x3){
-            answer = this.whenXSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}, {x:x3,y:y3,d:d3}], 1, 2, 0)
+            answer = this.whenXSame(points, 1, 2, 0)
         }else if (y1===y2){
-            answer = this.whenYSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}, {x:x3,y:y3,d:d3}], 0, 1, 2)
+            answer = this.whenYSame(points, 0, 1, 2)
         } else if (y1===y3) {
-            answer = this.whenYSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}, {x:x3,y:y3,d:d3}], 0, 2, 1);
+            answer = this.whenYSame(points, 0, 2, 1);
         } else if (y2===y3){
-            answer = this.whenYSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}, {x:x3,y:y3,d:d3}], 1, 2, 0)
+            answer = this.whenYSame(points, 1, 2, 0)
         }
         else {
             const alpha1 = (y1 - y2) / (x2 - x1)
@@ -279,13 +279,18 @@ class Agent {
         xs.push(points[index1].x + Math.sqrt(Math.abs((points[index1].d)**2 - (y - points[index1].y)**2)));
         xs.push(points[index1].x - Math.sqrt(Math.abs((points[index1].d)**2 - (y - points[index1].y)**2)));
         let answer = null;
-        if (index3) {
-            const forX1 = Math.abs((xs[0] - points[index3].x)**2 + (y - points[index3].y)**2 - (points[index3].d)**2);
-            const forX2 = Math.abs((xs[1] - points[index3].x)**2 + (y - points[index3].y)**2 - (points[index3].d)**2);
-            if (forX1 - forX2 > 0) {
-                answer = {x: xs[1], y}
-            } else {
+        if (index2) {
+            const forX1 = Math.abs((xs[0] - points[index2].x)**2 + (y - points[index2].y)**2 - (points[index2].d)**2);
+            const forX2 = Math.abs((xs[1] - points[index2].x)**2 + (y - points[index2].y)**2 - (points[index2].d)**2);
+            // if (forX1 - forX2 > 0) {
+            //     answer = {x: xs[1], y}
+            // } else {
+            //     answer = {x: xs[0], y}
+            // }
+            if (Math.abs(xs[0]) <= 54) {
                 answer = {x: xs[0], y}
+            } else {
+                answer = {x: xs[1], y}
             }
         } else {
             if (Math.abs(xs[0]) <= 54) {

@@ -175,53 +175,119 @@ class Agent {
     }
 
     orientationWithTwoFlag(flag1, flag2) {
-        const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)]?Flags[parseFlagFromArray(flag1.cmd.p)]:{x: flag1.p[0], y: flag2.p[1]};
-        const {x:x2, y:y2} = Flags[parseFlagFromArray(flag2.cmd.p)];
-        const d1 = flag1.p[0]
-        const d2 = flag2.p[0]
+        // const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)]?Flags[parseFlagFromArray(flag1.cmd.p)]:{x: flag1.p[0], y: flag2.p[1]};
+        // const {x:x2, y:y2} = Flags[parseFlagFromArray(flag2.cmd.p)];
+        // const d1 = flag1.p[0]
+        // const d2 = flag2.p[0]
+        //
+        // const alpha = (y1 - y2) / (x2 - x1)
+        // const beta = (y2 ** 2 - y1 ** 2 + x2 ** 2 - x1 ** 2 + d1 ** 2 - d2 ** 2) /
+        //     (2 * (x2 - x1))
+        //
+        // let x, y, a, b, c;
+        //
+        // a = alpha ** 2 + 1
+        // b = -2 * (alpha * (x1 - beta) + y1)
+        // c = (x1 - beta) ** 2 + y1 ** 2 - d1 ** 2
+        // let D = b ** 2 - 4 * a * c
+        // let result = {x:null, y:null};
+        // if (x1 === x2) {
+        //     return this.whenXSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}], 0, 1)
+        // } else {
+        //     result.y = (-b + Math.sqrt(D))/(2*a)
+        //     if (Math.abs(result.y) >= 32 || Number.isNaN(result.y)) {
+        //         result.y = (-b - Math.sqrt(D))/(2*a)
+        //     }
+        //
+        // }
+        // if (y1 === y2) {
+        //     return this.whenYSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}], 0, 1)
+        // } else {
+        //     result.x = x1 + Math.sqrt(d1 ** 2 - (y - y1) ** 2)
+        //     if (Math.abs(result.x) >= 52.5 || Number.isNaN(result.x)) {
+        //         result.x = x1 - Math.sqrt(d1 ** 2 - (y - y1) ** 2)
+        //     }
+        // }
+        // // x = -x
+        // // y = -y
+        // // return {x, y}
+        // return result
 
-        const alpha = (y1 - y2) / (x2 - x1)
-        const beta = (y2 ** 2 - y1 ** 2 + x2 ** 2 - x1 ** 2 + d1 ** 2 - d2 ** 2) /
-            (2 * (x2 - x1))
-
-        let x, y, a, b, c;
-
-        a = alpha ** 2 + 1
-        b = -2 * (alpha * (x1 - beta) + y1)
-        c = (x1 - beta) ** 2 + y1 ** 2 - d1 ** 2
-        let D = b ** 2 - 4 * a * c
-        let result = {x:null, y:null};
-        if (x1 === x2) {
-            return this.whenXSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}], 0, 1)
-        } else {
-            result.y = (-b + Math.sqrt(D))/(2*a)
-            if (Math.abs(result.y) >= 32) {
-                result.y = (-b - Math.sqrt(D))/(2*a)
+        let coords = []
+        let distance = []
+        let p = [flag1, flag2]
+        // console.log('getAnswerForTwoFlags', [flag1, flag2])
+        p.forEach((q) => {
+            if (q.cmd) {
+                coords.push(Flags[q.cmd.p.join('')])
+                distance.push(q.p[0])
             }
-
-        }
-        if (y1 === y2) {
-            return this.whenYSame([{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}], 0, 1)
+        })
+        //console.log('getAnswerForTwoFlags', p[0], p[1])
+        let answer = null
+        const points = [{x:p[0].x,y:p[0].y,d:distance[0]},{x:p[1].x,y:p[1].y,d:distance[1]}];
+        console.log(coords)
+        if (coords[0].x === coords[1].x) {
+            answer = this.whenXSame(points, 0, 1)
+        } else if (coords[0].y === coords[1].y) {
+            answer = this.whenYSame(points, 0, 1)
         } else {
-            result.x = x1 + Math.sqrt(d1 ** 2 - (y - y1) ** 2)
-            if (Math.abs(result.x) >= 52.5) {
-                result.x = x1 - Math.sqrt(d1 ** 2 - (y - y1) ** 2)
-            }
+            const alpha = (coords[0].y - coords[1].y) / (coords[1].x - coords[0].x)
+            const beta = (coords[1].y**2 - coords[0].y**2 + coords[1].x**2 - coords[0].x**2 + distance[0]**2 - distance[1]**2)
+                / (2 * (coords[1].x - coords[0].x))
+            const a = alpha**2 + 1
+            const b = -2 * (alpha * (coords[0].x - beta) + coords[0].y)
+            const c = (coords[0].x - beta)**2 + coords[0].y**2 - distance[0]**2
+            const ys = []
+            ys.push((-b + Math.sqrt(b**2 - 4 * a * c)) / (2 * a))
+            ys.push((-b - Math.sqrt(b**2 - 4 * a * c)) / (2 * a))
+            const xs = []
+            xs.push(coords[0].x + Math.sqrt(distance[0]**2 - (ys[0] - coords[0].y)**2))
+            xs.push(coords[0].x - Math.sqrt(distance[0]**2 - (ys[0] - coords[0].y)**2))
+            xs.push(coords[0].x + Math.sqrt(distance[0]**2 - (ys[1] - coords[0].y)**2))
+            xs.push(coords[0].x - Math.sqrt(distance[0]**2 - (ys[1] - coords[0].y)**2))
+            answer = this.checkAnswersForTwoFlags(xs, ys)
         }
-        // x = -x
-        // y = -y
-        // return {x, y}
-        return result
+        return answer
+
     }
 
 
     orientationWithThreeFlag(flag1, flag2, flag3) {
-        const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)]?Flags[parseFlagFromArray(flag1.cmd.p)]:{x: flag1.p[0], y: flag2.p[1]};
-        const {x:x2, y:y2} = Flags[parseFlagFromArray(flag2.cmd.p)];
-        const {x:x3, y:y3} = Flags[parseFlagFromArray(flag3.cmd.p)];
-        const d1 = flag1.p[0];
-        const d2 = flag2.p[0];
-        const d3 = flag3.p[0];
+        let coords = []
+        let distance = []
+        const p = [flag1, flag2, flag3]
+        // console.log('getAnswerForThreeFlags see', p)
+
+        p.forEach((q) => {
+            if (q.cmd && coords.length < 3) {
+                if (q.cmd.p && Flags[q.cmd.p.join('')] &&
+                    coords.filter((c) => c.x === Flags[q.cmd.p.join('')].x).length < 2 &&
+                    coords.filter((c) => c.y === Flags[q.cmd.p.join('')].y).length < 2) {
+                    coords.push(Flags[q.cmd.p.join('')])
+                    distance.push(q.p[0])
+                }
+            }
+        })
+        //console.log('getAnswerForTwoFlags', p[0], p[1], p[2])
+        if (coords.length < 3) {
+            return this.orientationWithTwoFlag(flag1, flag2)
+        } else {
+        // const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)]?Flags[parseFlagFromArray(flag1.cmd.p)]:{x: flag1.p[0], y: flag2.p[1]};
+        // const {x:x2, y:y2} = Flags[parseFlagFromArray(flag2.cmd.p)];
+        // const {x:x3, y:y3} = Flags[parseFlagFromArray(flag3.cmd.p)];
+        // const d1 = flag1.p[0];
+        // const d2 = flag2.p[0];
+        // const d3 = flag3.p[0];
+        const {x:x1, y:y1} = coords[0]
+        const {x:x2, y:y2} = coords[1]
+        const {x:x3, y:y3} = coords[2]
+        const d1 = distance[0];
+        const d2 = distance[1];
+        const d3 = distance[2];
+            console.log(x1,x2,x3,y1,y2,y3,d1,d2,d3);
+
+
 
         let answer = undefined;
         const points = [{x:x1,y:y1,d:d1},{x:x2,y:y2,d:d2}, {x:x3,y:y3,d:d3}];

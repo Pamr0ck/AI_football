@@ -37,7 +37,7 @@ class Agent {
             currentTarget: 0
         }
         this.flagNum = 0;
-        this.flags=["fc", "gr", "fct"];
+        this.flags=["fprt", "fprb", "gr"];
     }
 
     msgGot(msg) { // Получение сообщения
@@ -99,35 +99,14 @@ class Agent {
 
 
     getAction(p) {
-        // this.act = {}
         this.isSeeBall(p);
-        // const target = p.filter((obj) => obj.cmd && this.controller.flags[this.controller.currentTarget].fl == obj.cmd.p.join(''))
-        // console.log(target, target.cmd)
-        // if (target) {
-        //     if (this.controller.flags[this.controller.currentTarget].act === 'flag') {
-        //         if (target.p[0] < 3) {
-        //             this.controller.currentTarget += 1
-        //         } else {
-        //
-        //
-        //             this.act = {n: "dash", v: 10};
-        //         }
-        //     } else if (this.controller.flags[this.controller.currentTarget].act === 'kick') {
-        //         this.controller.currentTarget = 0
-        //     }
-        // } else {
-        //     this.act = {n: "turn", v: "80"};
-        // }
-
     }
 
     isSeeBall(p) {
         const ball = p.filter(
             (obj) => obj.cmd && obj.cmd.p[0] === 'b')[0];
 
-        // console.log(ball);
         if (ball) {
-            // this.ballInFrontOfUs();
             this.isBallFrontMe(ball, p);
         } else {
             this.act = {n: "turn", v: "80"};
@@ -137,7 +116,6 @@ class Agent {
 
     isBallFrontMe(ball, p) {
         if (ball.p[1] < 0.5) { // это угол
-            // console.log(ball);
             this.isBallNear(ball, p);
         } else {
             this.act = {n: "turn", v: ball.p[1]};
@@ -146,7 +124,6 @@ class Agent {
 
     isBallNear(ball, p) {
         if (ball.p[0] < 1) {
-            // console.log(ball);
 
 
             // this.act = {n: "dash", v: 10};
@@ -177,8 +154,8 @@ class Agent {
             this.flagNum += 1;
         }
         else {
-            console.log('kick', target, target?.p);
-            this.act = {n: "kick", v: `${target.p[0]} ${target.p[0]}`};
+            console.log('kick', target, target?.p, target.cmd?.p?.[0]==='g');
+            this.act = {n: "kick", v: `${target.cmd?.p?.[0]==='g'?'60':target.p[0]} ${target.p[1]}`};
         }
     }
 

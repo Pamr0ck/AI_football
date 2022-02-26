@@ -98,23 +98,25 @@ class Agent {
 
 
     getAction(p) {
-        this.act = {}
-        // this.isSeeBall(p);
-        const target = p.filter((obj) => obj.cmd && this.controller.flags[this.controller.currentTarget].fl == obj.cmd.p.join(''))
-        console.log(target, target.cmd)
-        if (target) {
-            if (this.controller.flags[this.controller.currentTarget].act === 'flag') {
-                if (target.p[0] < 3) {
-                    this.controller.currentTarget += 1
-                } else {
-                    // run to target
-                }
-            } else if (this.controller.flags[this.controller.currentTarget].act === 'kick') {
-                this.controller.currentTarget = 0
-            }
-        } else {
-            this.act = {n: "turn", v: "80"};
-        }
+        // this.act = {}
+        this.isSeeBall(p);
+        // const target = p.filter((obj) => obj.cmd && this.controller.flags[this.controller.currentTarget].fl == obj.cmd.p.join(''))
+        // console.log(target, target.cmd)
+        // if (target) {
+        //     if (this.controller.flags[this.controller.currentTarget].act === 'flag') {
+        //         if (target.p[0] < 3) {
+        //             this.controller.currentTarget += 1
+        //         } else {
+        //
+        //
+        //             this.act = {n: "dash", v: 10};
+        //         }
+        //     } else if (this.controller.flags[this.controller.currentTarget].act === 'kick') {
+        //         this.controller.currentTarget = 0
+        //     }
+        // } else {
+        //     this.act = {n: "turn", v: "80"};
+        // }
 
     }
 

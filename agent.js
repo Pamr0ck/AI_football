@@ -212,9 +212,6 @@ class Agent {
                 result.x = x1 - Math.sqrt(d1 ** 2 - (y - y1) ** 2)
             }
         }
-        // x = -x
-        // y = -y
-        // return {x, y}
         return result
     }
 
@@ -257,9 +254,6 @@ class Agent {
             answer = {x,y};
         }
 
-        if (Math.abs(answer.x)>100 || Math.abs(answer.y)>100){
-            console.log('PIZDA', points)
-        }
         return answer;
     }
 
@@ -284,25 +278,16 @@ class Agent {
     whenXSame(points, index0, index1, index2) {
         const y = ((points[index1].y)**2 - (points[index0].y)**2 + (points[index0].d)**2 - (points[index1].d)**2) / (2 * (points[index1].y - points[index0].y));
         const xs = [];
-        xs.push(points[index0].x + Math.sqrt(Math.abs((points[index0].d)**2 - (y - points[index0].y)**2)));
-        xs.push(points[index0].x - Math.sqrt(Math.abs((points[index0].d)**2 - (y - points[index0].y)**2)));
+        xs.push(points[index0].x + Math.sqrt(Math.abs(points[index0].d ** 2 - (y - points[index0].y)**2)));
+        xs.push(points[index0].x - Math.sqrt(Math.abs(points[index0].d**2 - (y - points[index0].y)**2)));
         let answer = null;
         if (index2) {
-            const forX1 = Math.abs((xs[0] - points[index2].x)**2 + (y - points[index2].y)**2 - (points[index2].d)**2);
-            const forX2 = Math.abs((xs[1] - points[index2].x)**2 + (y - points[index2].y)**2 - (points[index2].d)**2);
-            // if (forX1>100 || forX2>100){
-            //     console.error("PIZDA R",points, xs, y);
-            // }
-            // console.log(forX1, forX2)
-            // if (forX1 - forX2 > 0) {
-            //     answer = {x: xs[1], y}
-            // } else {
-            //     answer = {x: xs[0], y}
-            // }
-            if (Math.abs(xs[0]) <= 54) {
-                answer = {x: xs[0], y}
-            } else {
+            const forX1 = Math.abs((xs[0] - points[index2].x)**2 + (y - points[index2].y)**2 - points[index2].d**2);
+            const forX2 = Math.abs((xs[1] - points[index2].x)**2 + (y - points[index2].y)**2 - points[index2].d**2);
+            if (forX1 - forX2 > 0) {
                 answer = {x: xs[1], y}
+            } else {
+                answer = {x: xs[0], y}
             }
         } else {
             if (Math.abs(xs[0]) <= 54) {
@@ -324,19 +309,10 @@ class Agent {
         if (index2) {
             const forY1 = Math.abs((x - points[index2].x)**2 + (ys[0] - points[index2].y)**2 - (points[index2].d)**2);
             const forY2 = Math.abs((x - points[index2].x)**2 + (ys[1] - points[index2].y)**2 - (points[index2].d)**2);
-            // if (forY1 - forY2 > 0) {
-            //     answer = {x, y: ys[1]}
-            // } else {
-            //     answer = {x, y: ys[0]}
-            // }
-            if (forY1>100 || forY2>100){
-                console.error("PIZDA Y",points, ys, x);
-                console.log('index', index0, index1, index2)
-            }
-            if (Math.abs(ys[0]) <= 32) {
-                answer = {x, y: ys[0]}
-            } else {
+            if (forY1 - forY2 > 0) {
                 answer = {x, y: ys[1]}
+            } else {
+                answer = {x, y: ys[0]}
             }
         } else {
             if (Math.abs(ys[0]) <= 32) {

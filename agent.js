@@ -48,11 +48,14 @@ class Agent {
         let data = Msg.parseMsg(msg) // Разбор сообщения
         if (!data) throw new Error("Parse error\n" + msg)
         // Первое (hear) - начало игры
-        if (data.cmd === "hear")  {
-            if (!this.run)
-                if (data.p[1] === 'referee' && data.p[2] === 'play_on') {
-                    this.play_on = true
-                }
+        if (data.cmd === "hear") {
+            if (data.p[1] === 'referee' && data.p[2] === 'play_on') {
+                this.run = true
+            }
+            if (data.msg.includes('goal')) {
+                this.actionsController.currentAct = 0
+                this.run = false
+            }
         }
         if (data.cmd === "init") this.initAgent(data.p)//Инициализация
         this.analyzeEnv(data.msg, data.cmd, data.p) // Обработка
@@ -74,7 +77,6 @@ class Agent {
 
     sendCmd() {
         if (this.run) { // Игра начата
-            console.log('runned')
             if (this.act) { // Есть команда от игрока
                 if (this.act.n == "kick") // Пнуть мяч
                     this.socketSend(this.act.n, this.act.v + " 0")
@@ -85,13 +87,6 @@ class Agent {
         }
     }
 
-    speen(speed) {
-        setInterval(() => {
-            if (this.play_on) {
-                this.socketSend("turn", `${speed}`)
-            }
-        }, 500)
-    }
 
 
 }

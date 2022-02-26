@@ -31,12 +31,12 @@ const Flags = {
     },
 }
 
-export const parseFlagFromArray = (flagArray) => {
+const parseFlagFromArray = (flagArray) => {
     return flagArray.reduce((acc, curr) => acc + curr, '')
 }
 
 
-export const orientationWithTwoFlag = (flag1, flag2) => {
+const orientationWithTwoFlag = (flag1, flag2) => {
     const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)]?Flags[parseFlagFromArray(flag1.cmd.p)]:{x: flag1.p[0], y: flag2.p[1]};
     const {x:x2, y:y2} = Flags[parseFlagFromArray(flag2.cmd.p)];
     const d1 = flag1.p[0]
@@ -74,7 +74,7 @@ export const orientationWithTwoFlag = (flag1, flag2) => {
 }
 
 
-export const orientationWithThreeFlag = (flag1, flag2, flag3) => {
+const orientationWithThreeFlag = (flag1, flag2, flag3) => {
     const {x:x1, y:y1} = Flags[parseFlagFromArray(flag1.cmd.p)]?Flags[parseFlagFromArray(flag1.cmd.p)]:{x: flag1.p[0], y: flag2.p[1]};
     const {x:x2, y:y2} = Flags[parseFlagFromArray(flag2.cmd.p)];
     const {x:x3, y:y3} = Flags[parseFlagFromArray(flag3.cmd.p)];
@@ -115,7 +115,7 @@ export const orientationWithThreeFlag = (flag1, flag2, flag3) => {
     return answer;
 }
 
-export const getFlagsFromObject =(object, flags)=>{
+const getFlagsFromObject =(object, flags)=>{
     const result = [];
     result.push(object);
     flags.forEach((flag)=>{
@@ -133,7 +133,7 @@ export const getFlagsFromObject =(object, flags)=>{
     return result;
 }
 
-export const whenXSame =(points, index0, index1, index2)=> {
+const whenXSame =(points, index0, index1, index2)=> {
     const y = ((points[index1].y)**2 - (points[index0].y)**2 + (points[index0].d)**2 - (points[index1].d)**2) / (2 * (points[index1].y - points[index0].y));
     const xs = [];
     xs.push(points[index0].x + Math.sqrt(Math.abs(points[index0].d ** 2 - (y - points[index0].y)**2)));
@@ -158,7 +158,7 @@ export const whenXSame =(points, index0, index1, index2)=> {
     return answer
 }
 
-export const whenYSame = (points, index0, index1, index2)=> {
+const whenYSame = (points, index0, index1, index2)=> {
     const x = ((points[index1].x)**2 - (points[index0].x)**2 + (points[index0].d)**2 - (points[index1].d)**2) / (2 * (points[index1].x - points[index0].x));
     const ys = [];
     ys.push(points[index0].y + Math.sqrt(Math.abs((points[index0].d)**2 - (x - points[index0].x)**2)));

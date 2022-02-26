@@ -9,8 +9,7 @@ class Agent {
     constructor(teamName) {
         this.position = "l" // По умолчанию - левая половина поля
         this.run = false // Игра начата
-        this.act = null // Действия
-        this.play_on = false //
+        this.act = {} // Действия
         this.teamName = teamName
         this.rl = readline.createInterface({ // Чтение консоли
             input: process.stdin,
@@ -28,6 +27,16 @@ class Agent {
         this.sense_body = {}
         this.coords = {}
         this.position = 'l';
+
+        // this.
+        this.controller = {
+            flags: [{act: "flag", fl: "frb"},
+                {act: "flag", fl: "gl"},
+                {act: "flag", fl: "fc"},
+                {act: "kick", fl: "b", goal: "gr"}],
+            currentTarget: 0
+        }
+        this.flagNum = 0;
     }
 
     msgGot(msg) { // Получение сообщения
@@ -88,6 +97,71 @@ class Agent {
     }
 
 
+    getAction(p) {
+        this.act = {}
+        // this.isSeeBall(p);
+        const target = p.filter((obj) => obj.cmd && this.controller.flags[this.controller.currentTarget].fl == obj.cmd.p.join(''))
+        console.log(target, target.cmd)
+        if (target) {
+            if (this.controller.flags[this.controller.currentTarget].act === 'flag') {
+                if (target.p[0] < 3) {
+                    this.controller.currentTarget += 1
+                } else {
+                    // run to target
+                }
+            } else if (this.controller.flags[this.controller.currentTarget].act === 'kick') {
+                this.controller.currentTarget = 0
+            }
+        } else {
+            this.act = {n: "turn", v: "80"};
+        }
+
+    }
+
+    isSeeBall(p) {
+        const ball = p.filter(
+            (obj) => obj.cmd && obj.cmd.p[0] === 'b')[0];
+
+        console.log(ball);
+        if (ball) {
+            // this.ballInFrontOfUs();
+            this.isBallFrontMe(ball, p);
+        } else {
+            this.act = {n: "turn", v: "80"};
+        }
+    }
+
+
+    isBallFrontMe(ball, p) {
+        if (ball.p[1] < 0.5) { // это угол
+            console.log(ball);
+            this.isBallNear(ball, p);
+        } else {
+            this.act = {n: "turn", v: ball.p[1]};
+        }
+    }
+
+    isBallNear(ball, p) {
+        if (ball.p[0] < 3) {
+            console.log(ball);
+
+
+            this.act = {n: "dash", v: 10};
+            this.sendCmd();
+            this.isTargetSeeable(ball, p);
+        } else {
+            this.act = {n: "dash", v: 80};
+        }
+    }
+
+    isTargetSeeable(ball, p) {
+        // console.log(p)
+        //  { p: [ 2.5, -4, -0.1, -0.4 ], cmd: { p: [Array] } },
+        const currentTarget = p.filter((obj) => obj.cmd && obj.cmd.p.join('') === this.flags[this.flagNum])[0];
+        console.log(currentTarget);
+        console.log(this.flags[this.flagNum]);
+        console.log('-----------------------------');
+    }
 
 }
 

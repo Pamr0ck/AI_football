@@ -37,6 +37,7 @@ class Agent {
             currentTarget: 0
         }
         this.flagNum = 0;
+        this.flags=["fc", "gr", "fct"];
     }
 
     msgGot(msg) { // Получение сообщения
@@ -62,7 +63,7 @@ class Agent {
                 this.run = true
             }
             if (data.msg.includes('goal')) {
-                this.actionsController.currentAct = 0
+                // this.actionsController.currentAct = 0
                 this.run = false
             }
         }
@@ -88,7 +89,7 @@ class Agent {
         if (this.run) { // Игра начата
             if (this.act) { // Есть команда от игрока
                 if (this.act.n == "kick") // Пнуть мяч
-                    this.socketSend(this.act.n, this.act.v + " 0")
+                    this.socketSend(this.act.n, this.act.v)
                 else // Движение и поворот
                     this.socketSend(this.act.n, this.act.v)
             }
@@ -124,7 +125,7 @@ class Agent {
         const ball = p.filter(
             (obj) => obj.cmd && obj.cmd.p[0] === 'b')[0];
 
-        console.log(ball);
+        // console.log(ball);
         if (ball) {
             // this.ballInFrontOfUs();
             this.isBallFrontMe(ball, p);
@@ -136,7 +137,7 @@ class Agent {
 
     isBallFrontMe(ball, p) {
         if (ball.p[1] < 0.5) { // это угол
-            console.log(ball);
+            // console.log(ball);
             this.isBallNear(ball, p);
         } else {
             this.act = {n: "turn", v: ball.p[1]};
@@ -144,25 +145,41 @@ class Agent {
     }
 
     isBallNear(ball, p) {
-        if (ball.p[0] < 3) {
-            console.log(ball);
+        if (ball.p[0] < 1) {
+            // console.log(ball);
 
 
-            this.act = {n: "dash", v: 10};
-            this.sendCmd();
+            // this.act = {n: "dash", v: 10};
+            // this.sendCmd();
             this.isTargetSeeable(ball, p);
         } else {
-            this.act = {n: "dash", v: 80};
+            this.act = {n: "dash", v: `80`};
         }
     }
 
     isTargetSeeable(ball, p) {
-        // console.log(p)
-        //  { p: [ 2.5, -4, -0.1, -0.4 ], cmd: { p: [Array] } },
         const currentTarget = p.filter((obj) => obj.cmd && obj.cmd.p.join('') === this.flags[this.flagNum])[0];
-        console.log(currentTarget);
-        console.log(this.flags[this.flagNum]);
-        console.log('-----------------------------');
+        if( currentTarget )
+        {
+            console.log(currentTarget[this.flagNum]);
+            this.isBallNearTarget(ball, currentTarget);
+        }
+        else{
+            console.log('kick 15 80', currentTarget?.[0]);
+            this.act = {n: "kick", v: `15 80`};
+        }
+    }
+
+    isBallNearTarget(ball, target){
+        console.log(ball.p[0] - target.p[0]);
+        if( Math.abs(ball.p[0] - target.p[0]) < 3 )
+        {
+            this.flagNum += 1;
+        }
+        else {
+            console.log('kick', target, target?.p);
+            this.act = {n: "kick", v: `${target.p[0]} ${target.p[0]}`};
+        }
     }
 
 }

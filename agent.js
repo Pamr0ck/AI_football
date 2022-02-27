@@ -28,14 +28,6 @@ class Agent {
         this.coords = {}
         this.position = 'l';
 
-        // this.
-        this.controller = {
-            flags: [{act: "flag", fl: "frb"},
-                {act: "flag", fl: "gl"},
-                {act: "flag", fl: "fc"},
-                {act: "kick", fl: "b", goal: "gr"}],
-            currentTarget: 0
-        }
         this.flagNum = 0;
         this.flags=["fprt", "fprb", "gr"];
     }
@@ -63,7 +55,7 @@ class Agent {
                 this.run = true
             }
             if (data.msg.includes('goal')) {
-                // this.actionsController.currentAct = 0
+                this.flagNum = 0
                 this.run = false
             }
         }
@@ -124,10 +116,6 @@ class Agent {
 
     isBallNear(ball, p) {
         if (ball.p[0] < 1) {
-
-
-            // this.act = {n: "dash", v: 10};
-            // this.sendCmd();
             this.isTargetSeeable(ball, p);
         } else {
             this.act = {n: "dash", v: `80`};

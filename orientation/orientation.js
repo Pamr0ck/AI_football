@@ -188,5 +188,6 @@ module.exports = {
     orientationWithTwoFlag,
     parseFlagFromArray,
     whenXSame,
-    whenYSame
+    whenYSame,
+    Flags
 }

@@ -2,7 +2,10 @@ const Msg = require('./msg')
 // Подключение модуля разбора сообщений от сервера
 const readline = require('readline')
 
-const orientation = require('./orientation')
+const orientation = require('./orientation/orientation')
+const goalkeeperTree = require('./trees/goalkeeper/goalkeeperDecisionTree')
+const playerTree = require('./trees/player/tandemThree')
+
 
 // Подключение модуля ввода из командной строки
 class Agent {

@@ -1,7 +1,8 @@
 const DT = {
     state: {
         leader: 'p',
-        command: null
+        command: null,
+        turn: 'l'
     },
     root: {
         exec(mgr, state) {
@@ -44,7 +45,7 @@ const DT = {
         falseCond: 'notSoFarPlayer'
     },
     bigAngleToPlayer: {
-        condition: (mgr, state) => mgr.getAngle(state.leader) > 5,
+        condition: (mgr, state) => state.turn === 'l' ? mgr.getAngle(state.leader) > 5: mgr.getAngle(state.leader) < -5,
         trueCond: 'turnToPlayer',
         falseCond: 'runToPlayer'
     },

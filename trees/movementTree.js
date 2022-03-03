@@ -4,10 +4,6 @@ const DT = {
     state: {
         next: 0,
         sequence: [
-            // {
-            //     act: FL,
-            //     fl: "frb"
-            // },
             {
                 act: FL,
                 fl: "gl"

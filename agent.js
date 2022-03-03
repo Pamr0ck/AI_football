@@ -65,12 +65,14 @@ class Agent {
             else if (this.position === 'l' && this.id === 2) {
                 const dt = Object.assign({}, twoPlayersDT)
                 dt.state.leader = `p"${this.teamName}"1`
+                dt.state.turn = 'l'
                 this.act = DecisionTreeManager.getAction(dt, p)
                 //console.log(msg)
                 //console.log(`Action of Agent <${this.id}> (two players tree):`, this.act)
             } else if (this.position === 'l' && this.id === 3) {
                 const dt = Object.assign({}, threePlayersDT)
                 dt.state.leader = `p"${this.teamName}"1`
+                dt.state.turn = 'r'
                 this.act = DecisionTreeManager.getAction(dt, p)
                 //console.log(msg)
                 //console.log(`Action of Agent <${this.id}> (two players tree):`, this.act)

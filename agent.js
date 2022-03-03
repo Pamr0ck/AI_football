@@ -1,11 +1,8 @@
-const Msg = require('./msg')
-// Подключение модуля разбора сообщений от сервера
-const readline = require('readline')
-
-const orientation = require('./orientation/orientation')
-const goalkeeperTree = require('./trees/goalkeeper/goalkeeperDecisionTree')
-const playerTree = require('./trees/player/tandemThree')
-
+const Msg = require('./msg') // Подключение модуля разбора сообщений от сервера
+const DecisionTreeManager = require('./trees/treeManager')
+const flag_dt = require('./trees/movementTree')
+const two_players_dt = require('./trees/twoPlayerTree')
+const goalie_dt = require('./trees/goalkeeper')
 
 // Подключение модуля ввода из командной строки
 class Agent {

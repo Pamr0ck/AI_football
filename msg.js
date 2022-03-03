@@ -4,9 +4,14 @@ module.exports = {
             msg = msg.substring(0, msg.length - "\u0000".length)
         // Разбор сообщения
         let array = msg.match(/(\(|[-\d\.]+|[\\\"\w]+|\))/g)
-        let res = {msg, p: []} // Результирующее сообщение
+        let res = {
+            msg,
+            p: []
+        } // Результирующее сообщение
         // Анализировать с индекса 0, результат в res
-        this.parse(array, {idx: 0}, res)
+        this.parse(array, {
+            idx: 0
+        }, res)
         this.makeCmd(res) // Выделить команду
         return res
     },
@@ -21,9 +26,11 @@ module.exports = {
     parseInner(array, index, res) {
         // Пока не встретится закрывающая скобка
         while (array[index.idx] != ")") {
-            // Если внутри еще одна скобка
+            // Если внутри ещё одна скобка
             if (array[index.idx] == "(") {
-                let r = {p: []}
+                let r = {
+                    p: []
+                }
                 // Рекурсивный вызов с index
                 this.parse(array, index, r)
                 res.p.push(r)

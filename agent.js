@@ -9,25 +9,13 @@ const playerTree = require('./trees/player/tandemThree')
 
 // Подключение модуля ввода из командной строки
 class Agent {
-    constructor(goalkeeper) {
-        this.side = "l";
-        this.run = false;
-        if( goalkeeper === 'y' )
-        {
-            this.goalkeeper = true;
-            this.side = 'r';
-        }
-        else
-            this.goalkeeper = false;
+    constructor(speed, teamName, position = "l") {
+        this.position = position //"l" По умолчанию - левая половина поля
+        this.speed = speed
+        this.teamName = teamName
+        this.run = false // Игра начата
     }
 
-    init(teamName, version) {
-        if( this.goalkeeper )
-            this.socket.sendMsg(`(init ${teamName} (version ${version}) (goalkeeper))`);
-        else
-            this.socket.sendMsg(`(init ${teamName} (version ${version}))`);
-        this.teamName = teamName;
-    }
 
     msgGot(msg) { // Получение сообщения
         let data = msg.toString('utf8') // Приведение к строке
@@ -35,49 +23,57 @@ class Agent {
         this.sendCmd() // Отправка команды
     }
 
+
     setSocket(socket) { // Настройка сокета
         this.socket = socket
     }
+
 
     socketSend(cmd, value) { // Отправка команды
         this.socket.sendMsg(`(${cmd} ${value})`)
     }
 
+
     processMsg(msg) { // Обработка сообщения
         let data = Msg.parseMsg(msg) // Разбор сообщения
         if (!data) throw new Error("Parse error\n" + msg)
         // Первое (hear) - начало игры
-        if (data.cmd === "hear") {
-            if (data.p[1] === 'referee' && data.p[2] === 'play_on') {
+        if (data.cmd == "hear") {
+            if (data.msg.includes('play_on'))
                 this.run = true
-            }
-            if (data.msg.includes('goal')) {
-                this.flagNum = 0
-                this.run = false
-            }
+            // if (data.msg.includes('goal'))
+            // {
+            //   this.controller.currentAct = 0
+            //   this.run = false
+            // }
         }
-        if (data.cmd === "init") this.initAgent(data.p)//Инициализация
+        if (data.cmd == "init") this.initAgent(data.p) //Инициализация
         this.analyzeEnv(data.msg, data.cmd, data.p) // Обработка
     }
 
+
     initAgent(p) {
         if (p[0] == "r") this.position = "r" // Правая половина поля
-        else if (p[0] == "l") this.position = "l" // Левая половина поля
-
         if (p[1]) this.id = p[1] // id игрока
     }
 
-    // cmd === see||sense_body
-    analyzeEnv(msg, cmd, p) { // Анализ сообщения
-        // if (cmd === 'see' && this.run) {
-        //     this.getAction(p)
-        // }
 
-        if( this.goalkeeper ) {
-            this.act = goalkeeperTree.getAction(p, this.side);
-        }
-        else {
-            this.act = playerTree.getAction(p, this.teamName);
+    analyzeEnv(msg, cmd, p) { // Анализ сообщения
+        if (cmd === 'see' && this.run) {
+            if (this.position === 'l' && this.id === 1) {
+                this.act = DecisionTreeManager.getAction(flag_dt, p)
+                //console.log(`Action of Agent <${this.id}> (flag tree):`, this.act)
+            }
+            else if (this.position === 'l' && this.id === 2) {
+                const dt = Object.assign({}, two_players_dt)
+                dt.state.leader = `p"${this.teamName}"1`
+                this.act = DecisionTreeManager.getAction(dt, p)
+                //console.log(msg)
+                //console.log(`Action of Agent <${this.id}> (two players tree):`, this.act)
+            } else if (this.position === 'r' && this.id === 1) {
+                this.act = DecisionTreeManager.getAction(goalie_dt, p)
+                //console.log(`Action of Agent <${this.id}> (goalie):`, this.act)
+            }
         }
     }
 
@@ -92,65 +88,6 @@ class Agent {
             this.act = null // Сброс команды
         }
     }
-
-
-    // getAction(p) {
-    //     this.isSeeBall(p);
-    // }
-    //
-    // isSeeBall(p) {
-    //     const ball = p.filter(
-    //         (obj) => obj.cmd && obj.cmd.p[0] === 'b')[0];
-    //
-    //     if (ball) {
-    //         this.isBallFrontMe(ball, p);
-    //     } else {
-    //         this.act = {n: "turn", v: "80"};
-    //     }
-    // }
-
-
-    // isBallFrontMe(ball, p) {
-    //     if (ball.p[1] < 0.5) { // это угол
-    //         this.isBallNear(ball, p);
-    //     } else {
-    //         this.act = {n: "turn", v: ball.p[1]};
-    //     }
-    // }
-    //
-    // isBallNear(ball, p) {
-    //     if (ball.p[0] < 1) {
-    //         this.isTargetSeeable(ball, p);
-    //     } else {
-    //         this.act = {n: "dash", v: `80`};
-    //     }
-    // }
-    //
-    // isTargetSeeable(ball, p) {
-    //     const currentTarget = p.filter((obj) => obj.cmd && obj.cmd.p.join('') === this.flags[this.flagNum])[0];
-    //     if( currentTarget )
-    //     {
-    //         console.log(currentTarget[this.flagNum]);
-    //         this.isBallNearTarget(ball, currentTarget);
-    //     }
-    //     else{
-    //         console.log('kick 15 80', currentTarget?.[0]);
-    //         this.act = {n: "kick", v: `15 80`};
-    //     }
-    // }
-    //
-    // isBallNearTarget(ball, target){
-    //     console.log(ball.p[0] - target.p[0]);
-    //     if( Math.abs(ball.p[0] - target.p[0]) < 3 )
-    //     {
-    //         this.flagNum += 1;
-    //     }
-    //     else {
-    //         console.log('kick', target, target?.p, target.cmd?.p?.[0]==='g');
-    //         this.act = {n: "kick", v: `${target.cmd?.p?.[0]==='g'?'60':target.p[0]} ${target.p[1]}`};
-    //     }
-    // }
-
 }
-
 module.exports = Agent // Экспорт игрока
+ = Agent // Экспорт игрока

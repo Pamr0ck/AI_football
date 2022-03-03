@@ -14,16 +14,16 @@ class Agent {
         this.run = false;
         if( goalkeeper === 'y' )
         {
-            this.goalie = true;
+            this.goalkeeper = true;
             this.side = 'r';
         }
         else
-            this.goalie = false;
+            this.goalkeeper = false;
     }
 
     init(teamName, version) {
-        if( this.goalie )
-            this.socket.sendMsg(`(init ${teamName} (version ${version}) (goalie))`);
+        if( this.goalkeeper )
+            this.socket.sendMsg(`(init ${teamName} (version ${version}) (goalkeeper))`);
         else
             this.socket.sendMsg(`(init ${teamName} (version ${version}))`);
         this.teamName = teamName;
@@ -73,7 +73,7 @@ class Agent {
         //     this.getAction(p)
         // }
 
-        if( this.goalie ) {
+        if( this.goalkeeper ) {
             this.act = goalkeeperTree.getAction(p, this.side);
         }
         else {

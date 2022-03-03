@@ -75,8 +75,15 @@ class Agent {
 
     // cmd === see||sense_body
     analyzeEnv(msg, cmd, p) { // Анализ сообщения
-        if (cmd === 'see' && this.run) {
-            this.getAction(p)
+        // if (cmd === 'see' && this.run) {
+        //     this.getAction(p)
+        // }
+
+        if( this.goalie ) {
+            this.act = goalkeeperTree.getAction(p, this.side);
+        }
+        else {
+            this.act = playerTree.getAction(p, this.teamName);
         }
     }
 

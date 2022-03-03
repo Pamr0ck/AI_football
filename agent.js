@@ -1,7 +1,8 @@
 const Msg = require('./msg') // Подключение модуля разбора сообщений от сервера
 const DecisionTreeManager = require('./trees/treeManager')
 const flag_dt = require('./trees/movementTree')
-const two_players_dt = require('./trees/twoPlayerTree')
+const twoPlayersDT = require('./trees/twoPlayerTree')
+const threePlayersDT = require('./trees/threePlayerTree')
 const goalie_dt = require('./trees/goalkeeper')
 
 // Подключение модуля ввода из командной строки
@@ -62,7 +63,13 @@ class Agent {
                 //console.log(`Action of Agent <${this.id}> (flag tree):`, this.act)
             }
             else if (this.position === 'l' && this.id === 2) {
-                const dt = Object.assign({}, two_players_dt)
+                const dt = Object.assign({}, twoPlayersDT)
+                dt.state.leader = `p"${this.teamName}"1`
+                this.act = DecisionTreeManager.getAction(dt, p)
+                //console.log(msg)
+                //console.log(`Action of Agent <${this.id}> (two players tree):`, this.act)
+            } else if (this.position === 'l' && this.id === 3) {
+                const dt = Object.assign({}, threePlayersDT)
                 dt.state.leader = `p"${this.teamName}"1`
                 this.act = DecisionTreeManager.getAction(dt, p)
                 //console.log(msg)

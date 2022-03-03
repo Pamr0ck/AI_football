@@ -18,4 +18,5 @@ function createAgent(teamName, speed, coords, position, goalie) {
 
 createAgent("biba", 0, "-10 -5", 'l')
 createAgent("biba", 0, "-15 5", 'l')
+createAgent("biba", 0, "-15 -15", 'l')
 createAgent("boba", 0, "15 0", 'r', true)

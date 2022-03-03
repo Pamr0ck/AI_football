@@ -68,7 +68,7 @@ const DT = {
         next: 'sendCommand'
     },
     notSoFarPlayer: {
-        condition: (mgr, state) => mgr.getAngle(state.leader) > 40 || mgr.getAngle(state.leader) < 25,
+        condition: (mgr, state) => state.turn === 'l' ? (mgr.getAngle(state.leader) > 40 || mgr.getAngle(state.leader) < 25) : (mgr.getAngle(state.leader) < -40 || mgr.getAngle(state.leader) > -25),
         trueCond: 'turnToPlayerMinus30',
         falseCond: 'closeDistToPlayer'
     },
@@ -76,7 +76,7 @@ const DT = {
         exec(mgr, state) {
             state.command = {
                 n: 'turn',
-                v: String(mgr.getAngle(state.leader) - 30)
+                v: state.turn === 'l'? String(mgr.getAngle(state.leader) - 30) : String(mgr.getAngle(state.leader) + 30)
             }
         },
         next: 'sendCommand'

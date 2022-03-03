@@ -58,7 +58,6 @@ const DT = {
             state.next++;
             state.action = state.sequence[state.next]
         },
-        //next: 'rootNext',
         next: 'root',
     },
     tooCloseGoal: {
@@ -130,7 +129,6 @@ const DT = {
         exec(mgr, state) {
             state.command = {
                 n: 'catch',
-                //v: String(mgr.getAngle(state.action.fl) === null ? 0 : mgr.getAngle(state.action.fl))
                 v: String(mgr.getAngle(state.action.fl))
             }
         },

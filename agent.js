@@ -2,14 +2,12 @@ const Msg = require('./msg') // Подключение модуля разбор
 const DecisionTreeManager = require('./trees/treeManager')
 const flag_dt = require('./trees/movementTree')
 const twoPlayersDT = require('./trees/twoPlayerTree')
-const threePlayersDT = require('./trees/threePlayerTree')
 const goalie_dt = require('./trees/goalkeeper')
 
 // Подключение модуля ввода из командной строки
 class Agent {
     constructor(speed, teamName, position = "l") {
         this.position = position //"l" По умолчанию - левая половина поля
-        this.speed = speed
         this.teamName = teamName
         this.run = false // Игра начата
     }
@@ -39,11 +37,6 @@ class Agent {
         if (data.cmd == "hear") {
             if (data.msg.includes('play_on'))
                 this.run = true
-            // if (data.msg.includes('goal'))
-            // {
-            //   this.controller.currentAct = 0
-            //   this.run = false
-            // }
         }
         if (data.cmd == "init") this.initAgent(data.p) //Инициализация
         this.analyzeEnv(data.msg, data.cmd, data.p) // Обработка
@@ -60,25 +53,19 @@ class Agent {
         if (cmd === 'see' && this.run) {
             if (this.position === 'l' && this.id === 1) {
                 this.act = DecisionTreeManager.getAction(flag_dt, p)
-                //console.log(`Action of Agent <${this.id}> (flag tree):`, this.act)
             }
             else if (this.position === 'l' && this.id === 2) {
                 const dt = Object.assign({}, twoPlayersDT)
                 dt.state.leader = `p"${this.teamName}"1`
                 dt.state.turn = 'l'
                 this.act = DecisionTreeManager.getAction(dt, p)
-                //console.log(msg)
-                //console.log(`Action of Agent <${this.id}> (two players tree):`, this.act)
             } else if (this.position === 'l' && this.id === 3) {
-                const dt = Object.assign({}, threePlayersDT)
+                const dt = Object.assign({}, twoPlayersDT)
                 dt.state.leader = `p"${this.teamName}"1`
                 dt.state.turn = 'r'
                 this.act = DecisionTreeManager.getAction(dt, p)
-                //console.log(msg)
-                //console.log(`Action of Agent <${this.id}> (two players tree):`, this.act)
             } else if (this.position === 'r' && this.id === 1) {
                 this.act = DecisionTreeManager.getAction(goalie_dt, p)
-                //console.log(`Action of Agent <${this.id}> (goalie):`, this.act)
             }
         }
     }
@@ -96,4 +83,3 @@ class Agent {
     }
 }
 module.exports = Agent // Экспорт игрока
- = Agent // Экспорт игрока

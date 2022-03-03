@@ -9,30 +9,24 @@ const playerTree = require('./trees/player/tandemThree')
 
 // Подключение модуля ввода из командной строки
 class Agent {
-    constructor(teamName) {
-        this.position = "l" // По умолчанию - левая половина поля
-        this.run = false // Игра начата
-        this.act = {} // Действия
-        this.teamName = teamName
-        this.rl = readline.createInterface({ // Чтение консоли
-            input: process.stdin,
-            output: process.stdout
-        })
-        this.rl.on('line', (input) => { // Обработка строки из консоли
-            if (this.run) { // Если игра начата
-                // Движения вперед, вправо, влево, удар по мячу
-                if ("w" == input) this.act = {n: "dash", v: 100}
-                if ("d" == input) this.act = {n: "turn", v: 20}
-                if ("a" == input) this.act = {n: "turn", v: -20}
-                if ("s" == input) this.act = {n: "kick", v: 100}
-            }
-        })
-        this.sense_body = {}
-        this.coords = {}
-        this.position = 'l';
+    constructor(goalkeeper) {
+        this.side = "l";
+        this.run = false;
+        if( goalkeeper === 'y' )
+        {
+            this.goalie = true;
+            this.side = 'r';
+        }
+        else
+            this.goalie = false;
+    }
 
-        this.flagNum = 0;
-        this.flags=["fprt", "fprb", "gr"];
+    init(teamName, version) {
+        if( this.goalie )
+            this.socket.sendMsg(`(init ${teamName} (version ${version}) (goalie))`);
+        else
+            this.socket.sendMsg(`(init ${teamName} (version ${version}))`);
+        this.teamName = teamName;
     }
 
     msgGot(msg) { // Получение сообщения
@@ -100,62 +94,62 @@ class Agent {
     }
 
 
-    getAction(p) {
-        this.isSeeBall(p);
-    }
+    // getAction(p) {
+    //     this.isSeeBall(p);
+    // }
+    //
+    // isSeeBall(p) {
+    //     const ball = p.filter(
+    //         (obj) => obj.cmd && obj.cmd.p[0] === 'b')[0];
+    //
+    //     if (ball) {
+    //         this.isBallFrontMe(ball, p);
+    //     } else {
+    //         this.act = {n: "turn", v: "80"};
+    //     }
+    // }
 
-    isSeeBall(p) {
-        const ball = p.filter(
-            (obj) => obj.cmd && obj.cmd.p[0] === 'b')[0];
 
-        if (ball) {
-            this.isBallFrontMe(ball, p);
-        } else {
-            this.act = {n: "turn", v: "80"};
-        }
-    }
-
-
-    isBallFrontMe(ball, p) {
-        if (ball.p[1] < 0.5) { // это угол
-            this.isBallNear(ball, p);
-        } else {
-            this.act = {n: "turn", v: ball.p[1]};
-        }
-    }
-
-    isBallNear(ball, p) {
-        if (ball.p[0] < 1) {
-            this.isTargetSeeable(ball, p);
-        } else {
-            this.act = {n: "dash", v: `80`};
-        }
-    }
-
-    isTargetSeeable(ball, p) {
-        const currentTarget = p.filter((obj) => obj.cmd && obj.cmd.p.join('') === this.flags[this.flagNum])[0];
-        if( currentTarget )
-        {
-            console.log(currentTarget[this.flagNum]);
-            this.isBallNearTarget(ball, currentTarget);
-        }
-        else{
-            console.log('kick 15 80', currentTarget?.[0]);
-            this.act = {n: "kick", v: `15 80`};
-        }
-    }
-
-    isBallNearTarget(ball, target){
-        console.log(ball.p[0] - target.p[0]);
-        if( Math.abs(ball.p[0] - target.p[0]) < 3 )
-        {
-            this.flagNum += 1;
-        }
-        else {
-            console.log('kick', target, target?.p, target.cmd?.p?.[0]==='g');
-            this.act = {n: "kick", v: `${target.cmd?.p?.[0]==='g'?'60':target.p[0]} ${target.p[1]}`};
-        }
-    }
+    // isBallFrontMe(ball, p) {
+    //     if (ball.p[1] < 0.5) { // это угол
+    //         this.isBallNear(ball, p);
+    //     } else {
+    //         this.act = {n: "turn", v: ball.p[1]};
+    //     }
+    // }
+    //
+    // isBallNear(ball, p) {
+    //     if (ball.p[0] < 1) {
+    //         this.isTargetSeeable(ball, p);
+    //     } else {
+    //         this.act = {n: "dash", v: `80`};
+    //     }
+    // }
+    //
+    // isTargetSeeable(ball, p) {
+    //     const currentTarget = p.filter((obj) => obj.cmd && obj.cmd.p.join('') === this.flags[this.flagNum])[0];
+    //     if( currentTarget )
+    //     {
+    //         console.log(currentTarget[this.flagNum]);
+    //         this.isBallNearTarget(ball, currentTarget);
+    //     }
+    //     else{
+    //         console.log('kick 15 80', currentTarget?.[0]);
+    //         this.act = {n: "kick", v: `15 80`};
+    //     }
+    // }
+    //
+    // isBallNearTarget(ball, target){
+    //     console.log(ball.p[0] - target.p[0]);
+    //     if( Math.abs(ball.p[0] - target.p[0]) < 3 )
+    //     {
+    //         this.flagNum += 1;
+    //     }
+    //     else {
+    //         console.log('kick', target, target?.p, target.cmd?.p?.[0]==='g');
+    //         this.act = {n: "kick", v: `${target.cmd?.p?.[0]==='g'?'60':target.p[0]} ${target.p[1]}`};
+    //     }
+    // }
 
 }
 

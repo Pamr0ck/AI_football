@@ -6,8 +6,8 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
-function createAgent(teamName, speed, coords, position, goalie) {
-    let agent = new Agent(speed, teamName, position); // Создание экземпляра агента
+function createAgent(teamName, coords, position, goalie) {
+    let agent = new Agent(teamName, position); // Создание экземпляра агента
     console.log('agent', agent)
     require('./socket')(agent, teamName, VERSION, goalie) //Настройка сокета
     setTimeout(() => {
@@ -16,7 +16,7 @@ function createAgent(teamName, speed, coords, position, goalie) {
     }, 20)
 }
 
-createAgent("biba", 0, "-10 -5", 'l', false)
-createAgent("biba",  0, "-15 5", 'l', false)
-createAgent("biba",  0, "-15 -15", 'l', false)
-createAgent("boba",  0, "15 0", 'r', true)
+createAgent("biba", "-10 -5", 'l', false)
+createAgent("biba", "-15 5", 'l', false)
+createAgent("biba", "-15 -15", 'l', false)
+createAgent("boba", "15 0", 'r', true)

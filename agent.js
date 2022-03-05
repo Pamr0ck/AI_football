@@ -6,7 +6,7 @@ const goalie_dt = require('./trees/goalkeeper')
 
 // Подключение модуля ввода из командной строки
 class Agent {
-    constructor(speed, teamName, position = "l") {
+    constructor(teamName, position = "l") {
         this.position = position //"l" По умолчанию - левая половина поля
         this.teamName = teamName
         this.run = false // Игра начата

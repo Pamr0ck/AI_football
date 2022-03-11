@@ -45,8 +45,8 @@ const DT = {
         falseCond: 'notSoFarPlayer'
     },
     bigAngleToPlayer: {
-        condition: (mgr, state) => state.turn === 'l' ? mgr.getAngle(state.leader) > 5: mgr.getAngle(state.leader) < -5,
-        trueCond: 'turnToPlayer',
+        condition: (mgr, state) => state.turn === 'l' ? (mgr.getAngle(state.leader) > 40 || mgr.getAngle(state.leader) < 25) : (mgr.getAngle(state.leader) < -40 || mgr.getAngle(state.leader) > -25),
+        trueCond: 'turnToPlayerMinus30',
         falseCond: 'runToPlayer'
     },
     turnToPlayer: {

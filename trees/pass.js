@@ -1,10 +1,10 @@
 const FL = "flag", PS = "pass", ST= "stop", SAY = "say"
+const TEAM = "Team"
 const START_COORD = "-12 -15"
 const NUMBER_GOAL_PLAYER = 2
 
 const DT = {
     state: {
-        team: 'biba',
         next: 0,
         sequence: [
             {
@@ -136,7 +136,7 @@ const DT = {
         falseCond: "farGoal",
     },
     closeBall: {
-        condition: (mgr, state) => mgr.getVisible(`p"${state.team}"`) || mgr.getVisible(`p"${state.team}"${NUMBER_GOAL_PLAYER}`),
+        condition: (mgr, state) => mgr.getVisible(`p"${TEAM}"`) || mgr.getVisible(`p"${TEAM}"${NUMBER_GOAL_PLAYER}`),
         trueCond: "checkPlayerCoords",
         falseCond: "playerInvisible",
     },
@@ -147,32 +147,30 @@ const DT = {
     },
     updateTeammateCoords: {
         exec(mgr, state) {
-            console.log('updateTeammateCoords')
             state.teammateCoords.push({
-                pos: mgr.getPlayerPos(state.team),
-                angle: mgr.getAngle(`p"${state.team}"`) === null ? mgr.getAngle(`p"${state.team}"${NUMBER_GOAL_PLAYER}`) : mgr.getAngle(`p"${state.team}"`)
+                pos: mgr.getPlayerPos(TEAM),
+                angle: mgr.getAngle(`p"${TEAM}"`) === null ? mgr.getAngle(`p"${TEAM}"${NUMBER_GOAL_PLAYER}`) : mgr.getAngle(`p"${TEAM}"`)
             })
         },
         next: "sendCommand",
     },
     kick: {
         exec(mgr, state) {
-            console.log('KICK')
             state.command = {
                 n: "kick",
+                //v: `90 ${mgr.getAngle(`p"${TEAM}"`) === null ? mgr.getAngle(`p"${TEAM}"${NUMBER_GOAL_PLAYER}`) : mgr.getAngle(`p"${TEAM}"`)}`
                 v: `100 ${mgr.getAngleToPass(state.teammateCoords)}`
             }
             state.teammateCoords = []
             state.next++
             state.action = state.sequence[state.next]
-            console.log(state.command, state.teammateCoords, state.action)
         },
         next: "sendCommand",
     },
     playerInvisible: {
         exec(mgr, state) {
             console.log("INVIS")
-            console.log(mgr.getVisible(`p"${state.team}"`))
+            console.log(mgr.getVisible(`p"${TEAM}"`))
             state.command = {
                 n: "kick",
                 v: "10 45"

@@ -3,6 +3,8 @@ const DecisionTreeManager = require('./trees/treeManager')
 const flag_dt = require('./trees/movementTree')
 const twoPlayersDT = require('./trees/twoPlayerTree')
 const goalie_dt = require('./trees/goalkeeper')
+const passDT = require('./trees/pass')
+const goalDT = require('./trees/goal')
 
 // Подключение модуля ввода из командной строки
 class Agent {
@@ -50,22 +52,47 @@ class Agent {
 
 
     analyzeEnv(msg, cmd, p) { // Анализ сообщения
+        // if (cmd === 'see' && this.run) {
+        //     if (this.position === 'l' && this.id === 1) {
+        //         this.act = DecisionTreeManager.getAction(flag_dt, p)
+        //     }
+        //     else if (this.position === 'l' && this.id === 2) {
+        //         const dt = Object.assign({}, twoPlayersDT)
+        //         dt.state.leader = `p"${this.teamName}"1`
+        //         dt.state.turn = 'l'
+        //         this.act = DecisionTreeManager.getAction(dt, p)
+        //     } else if (this.position === 'l' && this.id === 3) {
+        //         const dt = Object.assign({}, twoPlayersDT)
+        //         dt.state.leader = `p"${this.teamName}"1`
+        //         dt.state.turn = 'r'
+        //         this.act = DecisionTreeManager.getAction(dt, p)
+        //     } else if (this.position === 'r' && this.id === 1) {
+        //         this.act = DecisionTreeManager.getAction(goalie_dt, p)
+        //     }
+        // }
+        if (cmd === 'hear' && p[2].includes('kick_off_')) {
+            passDT.state.isGoal = false
+            goalDT.state.isGoal = false
+            passDT.state.next = 0
+            goalDT.state.next = 0
+        }
+        if (cmd === 'hear' && p[2].includes('goal_l_')) {
+            passDT.state.isGoal = true
+            goalDT.state.isGoal = true
+            goalDT.state.isHeardGo = false
+        }
+        if (cmd === 'hear' && p[2] === '"go"') {
+            goalDT.state.isHeardGo = true
+        }
         if (cmd === 'see' && this.run) {
-            if (this.position === 'l' && this.id === 1) {
-                this.act = DecisionTreeManager.getAction(flag_dt, p)
-            }
-            else if (this.position === 'l' && this.id === 2) {
-                const dt = Object.assign({}, twoPlayersDT)
-                dt.state.leader = `p"${this.teamName}"1`
-                dt.state.turn = 'l'
-                this.act = DecisionTreeManager.getAction(dt, p)
-            } else if (this.position === 'l' && this.id === 3) {
-                const dt = Object.assign({}, twoPlayersDT)
-                dt.state.leader = `p"${this.teamName}"1`
-                dt.state.turn = 'r'
-                this.act = DecisionTreeManager.getAction(dt, p)
-            } else if (this.position === 'r' && this.id === 1) {
-                this.act = DecisionTreeManager.getAction(goalie_dt, p)
+            if (this.position === 'l') {
+                if (this.id === 1) {
+                    console.log(msg)
+                    console.log("\n")
+                    this.act = DecisionTreeManager.getAction(passDT, p)
+                } else {
+                    this.act = DecisionTreeManager.getAction(goalDT, p)
+                }
             }
         }
     }

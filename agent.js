@@ -5,6 +5,9 @@ const twoPlayersDT = require('./trees/twoPlayerTree')
 const goalie_dt = require('./trees/goalkeeper')
 const passDT = require('./trees/pass')
 const goalDT = require('./trees/goal')
+const manager = require('./timeAutomat/manager')
+const attack_ta = require('./timeAutomat/attackAutomat')
+const goalie_ta = require('./timeAutomat/goalieAutomat')
 
 // Подключение модуля ввода из командной строки
 class Agent {

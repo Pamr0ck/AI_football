@@ -22,23 +22,43 @@ module.exports = {
         return execute(dt, "root", this)
     },
     getVisible(goal) {
-        console.log(goal, goal === 'p'
-            ? Boolean(this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal))
-            : Boolean(this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal)));
-        return goal === 'p'
-            ? Boolean(this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal))
-            : Boolean(this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal))
+        // return goal === 'p'
+        //     ? Boolean(this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal))
+        //     : Boolean(this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal))
+        if (typeof goal === 'object') {
+            let p = this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal[0] && obj.cmd.p[1] === goal[1])
+            if (!p) p = this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal[0])
+            return Boolean(p)
+        }
+        return Boolean(this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal))
     },
     getDistance(goal) {
-        const goalObj = goal === 'p'
-            ? this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal)
-            : this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal)
+        // const goalObj = goal === 'p'
+        //     ? this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal)
+        //     : this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal)
+        // return goalObj && goalObj.p.length > 1 ? goalObj.p[0] : null
+        let goalObj
+        if (typeof goal === 'object') {
+            goalObj = this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal[0] && obj.cmd.p[1] === goal[1])
+            if (!goalObj) goalObj = this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal[0])
+        } else {
+            goalObj = this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal)
+        }
         return goalObj && goalObj.p.length > 1 ? goalObj.p[0] : null
     },
     getAngle(goal) {
-        const goalObj = goal === 'p'
-            ? this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal)
-            : this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal)
+        // const goalObj = goal === 'p'
+        //     ? this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal)
+        //     : this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal)
+        // return goalObj ? (goalObj.p.length === 1 ? goalObj.p[0] : goalObj.p[1]) : null
+        let goalObj
+        if (typeof goal === 'object') {
+            goalObj = this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal[0] && obj.cmd.p[1] === goal[1])
+            if (!goalObj) goalObj = this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal[0])
+        } else {
+            goalObj = this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal)
+        }
+
         return goalObj ? (goalObj.p.length === 1 ? goalObj.p[0] : goalObj.p[1]) : null
     },
     getMyPos() {

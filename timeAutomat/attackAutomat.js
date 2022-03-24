@@ -52,10 +52,8 @@ const TA = {
     edges: {
         /* Рёбра автомата (имя каждого ребра указывает на
          узел-источник и узел-приёмник) */
-        start_rotate: [{
-        }],
-        rotate_start: [{
-        }],
+        start_rotate: [{}],
+        rotate_start: [{}],
         /* Список guard описывает перечень условий, проверяемых
          * для перехода по ребру. Знак lt - меньше, lte - меньше
          * либо равно. В качестве параметров принимаются числа или
@@ -80,24 +78,18 @@ const TA = {
         action_rotateToBall: [{
             synch: "isBigAngle?"
         }],
-        rotateToBall_action: [{
-        }],
-        action_runToBall: [{
-        }],
-        runToBall_action: [{
-        }],
+        rotateToBall_action: [{}],
+        action_runToBall: [{}],
+        runToBall_action: [{}],
         goalCheck_start: [{
             synch: "isBallInvisible?"
         }],
         goalCheck_kickHard: [{
             synch: "isGoalVisible?"
         }],
-        kickHard_start: [{
-        }],
-        goalCheck_kickWeak: [{
-        }],
-        kickWeak_goalCheck: [{
-        }],
+        kickHard_start: [{}],
+        goalCheck_kickWeak: [{}],
+        kickWeak_goalCheck: [{}],
     },
     actions: {
         beforeAction(taken, state) {

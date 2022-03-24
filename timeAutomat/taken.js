@@ -6,7 +6,7 @@ const Taken = {
         teamOwn: [], // моя команда
     },
     setHear(input) {
-        // TODO
+        this.state.hear = input
     },
     getObjData(obj) {
         if (!obj) return undefined

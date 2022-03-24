@@ -16,8 +16,7 @@ const TA = {
         }, // Внутренние переменные для методов
     },
     nodes: {
-        /* Узлы автомата, в каждом узле: имя и узлы, на кото-
-         рые есть переходы */
+        /* Узлы автомата, в каждом узле: имя и узлы, на которые есть переходы */
         start: {
             n: "start",
             e: ["close", "near", "far"]
@@ -240,7 +239,7 @@ const TA = {
                         state.variables.isMiniKick = false
                         return {
                             n: "kick",
-                            v: `${target.dist*2+40} ${target.angle}`
+                            v: `${target.dist*3+40} ${target.angle}`
                         }
                     }
                     state.next = false
@@ -258,7 +257,7 @@ const TA = {
                         }
                     return {
                         n: "dash",
-                        v: dist * 5 + 40
+                        v: dist * 5 + 60
                     }
                 }
             } else if (state.variables.isMiniKick) {
@@ -346,20 +345,14 @@ const TA = {
                         ? Math.max(Math.abs(enemy.angle), Math.abs(ball.angle)) - Math.min(Math.abs(enemy.angle), Math.abs(ball.angle))
                         : Math.abs(enemy.angle) + Math.abs(ball.angle)
                     const enemyDistanceToBall = Math.sqrt(enemy.dist ** 2 + ball.dist ** 2 - 2 * enemy.dist * ball.dist * Math.cos(degrees * Math.PI / 180))
-                    // console.log("Math.sign(enemy.angle) === Math.sign(ball.angle) = ", Math.sign(enemy.angle) === Math.sign(ball.angle))
-                    // console.log("cos val = ", degrees)
-                    // console.log("enemyAngle = ", enemy.angle)
-                    // console.log("myAngle = ", ball.angle)
-                    // console.log("Angle true : false - ", Math.max(Math.abs(enemy.angle), Math.abs(ball.angle)) - Math.min(Math.abs(enemy.angle), Math.abs(ball.angle)), " : ", Math.abs(enemy.angle) + Math.abs(ball.angle))
-                    // console.log("enemyDistanceToBall = ", enemyDistanceToBall)
-                    // console.log("myDistanceToBall = ", ball.dist)
+
                     return enemyDistanceToBall < ball.dist
                 })
                 return !Boolean(enemy)
             }
             if (!ballPrev) return true
-            if (ball.dist <= ballPrev.dist + 0.5) return true
-            return false
+            return ball.dist <= ballPrev.dist + 0.5;
+
         },
         runToBall(taken, state) { // Бежим к мячу
             state.next = false
@@ -385,7 +378,7 @@ const TA = {
                 }
             return {
                 n: "dash",
-                v: ball.dist * 5 + 50
+                v: ball.dist * 5 + 75
             }
 
         },

@@ -143,21 +143,17 @@ const Manager = {
 
         const comparison = {
             eq(ta, l, r) { // Проверка равенства
-                //console.log("lt: l = ", taStateObject(l, ta), " r = ", taStateObject(r, ta))
                 return taStateObject(l, ta) == taStateObject(r, ta)
             },
             lt(ta, l, r) { // Проверка неравенства
-                //console.log("lt: l = ", taStateObject(l, ta), " r = ", taStateObject(r, ta))
                 return taStateObject(l, ta) < taStateObject(r, ta)
             },
             lte(ta, l, r) { // Проверка неравенства
-                //console.log("lte: l = ", taStateObject(l, ta), " r = ", taStateObject(r, ta))
                 return taStateObject(l, ta) <= taStateObject(r, ta)
             }
         }
 
         if (!comparison[g.s]) throw `Unexpected guard: ${JSON.stringify(g)}`
-        //console.log("gl ? gr = ", g.l, g.s, g.r)
         return comparison[g.s](ta, g.l, g.r)
     },
 }

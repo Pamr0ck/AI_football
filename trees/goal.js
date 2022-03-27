@@ -108,7 +108,7 @@ const DT = {
         exec(mgr, state) {
             state.command = {
                 n: "dash",
-                v: 73
+                v: 70
             }
         },
         next: "sendCommand",

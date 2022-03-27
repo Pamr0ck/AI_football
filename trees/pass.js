@@ -1,5 +1,5 @@
 const FL = "flag", PS = "pass", ST= "stop", SAY = "say"
-const TEAM = "Team"
+const TEAM = "biba"
 const START_COORD = "-12 -15"
 const NUMBER_GOAL_PLAYER = 2
 
@@ -124,7 +124,7 @@ const DT = {
         exec(mgr, state) {
             state.command = {
                 n: "dash",
-                v: 60
+                v: 75
             }
             console.log("RUN")
         },

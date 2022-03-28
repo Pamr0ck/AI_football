@@ -1,5 +1,5 @@
 const FL = "flag", PS = "pass", ST= "stop", SAY = "say"
-const TEAM = "Team"
+const TEAM = "biba"
 const START_COORD = "-12 -15"
 const NUMBER_GOAL_PLAYER = 2
 
@@ -116,7 +116,7 @@ const DT = {
                 n: "turn",
                 v: mgr.getAngle(state.action.fl)
             }
-            console.log("ROTATE")
+            // console.log("ROTATE")
         },
         next: "sendCommand",
     },
@@ -126,7 +126,7 @@ const DT = {
                 n: "dash",
                 v: 60
             }
-            console.log("RUN")
+            // console.log("RUN")
         },
         next: "sendCommand",
     },
@@ -169,8 +169,8 @@ const DT = {
     },
     playerInvisible: {
         exec(mgr, state) {
-            console.log("INVIS")
-            console.log(mgr.getVisible(`p"${TEAM}"`))
+            // console.log("INVIS")
+            // console.log(mgr.getVisible(`p"${TEAM}"`))
             state.command = {
                 n: "kick",
                 v: "10 45"

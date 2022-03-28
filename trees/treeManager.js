@@ -22,9 +22,9 @@ module.exports = {
         return execute(dt, "root", this)
     },
     getVisible(goal) {
-        console.log(goal, goal === 'p'
-            ? Boolean(this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal))
-            : Boolean(this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal)));
+        // console.log(goal, goal === 'p'
+        //     ? Boolean(this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal))
+        //     : Boolean(this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal)));
         return goal === 'p'
             ? Boolean(this.p.find(obj => obj.cmd && obj.cmd.p[0] === goal))
             : Boolean(this.p.find(obj => obj.cmd && obj.cmd.p.join('') === goal))
@@ -56,18 +56,21 @@ module.exports = {
     },
     getPlayerPos(teamName) {
         const flags = this.p.filter((obj) => obj.cmd && (obj.cmd.p[0] === 'f' || obj.cmd.p[0] === 'g'))
-        console.log(teamName)
+        // console.log(teamName)
         const player = this.p.find((obj) => obj.cmd && (obj.cmd.p[0] === 'p') && obj.cmd.p[1] === `"${teamName}"`)
         const newFlags = location.getFlagsFromObject(player, flags)
-        console.log(location.orientationWithThreeFlag(...newFlags))
+        // console.log(location.orientationWithThreeFlag(...newFlags))
         return location.orientationWithThreeFlag(...newFlags)
     },
     getAngleToPass(playerPos) {
-        console.log(playerPos)
+        // console.log(playerPos)
         const newPos = {
             x: playerPos[1].pos.x + 18*(playerPos[1].pos.x - playerPos[0].pos.x),
             y: playerPos[1].pos.y + 18*(playerPos[1].pos.y - playerPos[0].pos.y)
         }
+        console.log(playerPos[0]);
+        console.log(playerPos[1]);
+        console.log(newPos);
         const cosAngle = (playerPos[1].pos.x*newPos.x + playerPos[1].pos.y*newPos.y)
             / (Math.sqrt(playerPos[1].pos.x**2 + playerPos[1].pos.y**2)
                 * Math.sqrt(newPos.x**2 + newPos.y**2))

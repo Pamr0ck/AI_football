@@ -87,8 +87,8 @@ class Agent {
         if (cmd === 'see' && this.run) {
             if (this.position === 'l') {
                 if (this.id === 1) {
-                    console.log(msg)
-                    console.log("\n")
+                    // console.log(msg)
+                    // console.log("\n")
                     this.act = DecisionTreeManager.getAction(passDT, p)
                 } else {
                     this.act = DecisionTreeManager.getAction(goalDT, p)

@@ -8,7 +8,7 @@ const rl = readline.createInterface({
 
 function createAgent(teamName, coords, position, goalie) {
     let agent = new Agent(teamName, position); // Создание экземпляра агента
-    console.log('agent', agent)
+    // console.log('agent', agent)
     require('./socket')(agent, teamName, VERSION, goalie) //Настройка сокета
     setTimeout(() => {
         agent.socketSend("move", `${position === 'r' ? '-' : ''}${coords}`)

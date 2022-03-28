@@ -1,6 +1,6 @@
 const FL = "flag", PS = "pass", ST= "stop", SAY = "say"
 const TEAM = "biba"
-const START_COORD = "-12 -10"
+const START_COORD = "-18 -10"
 const NUMBER_GOAL_PLAYER = 2
 
 const DT = {

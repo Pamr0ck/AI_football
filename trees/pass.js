@@ -1,6 +1,6 @@
 const FL = "flag", PS = "pass", ST= "stop", SAY = "say"
 const TEAM = "biba"
-const START_COORD = "-12 -15"
+const START_COORD = "-12 -10"
 const NUMBER_GOAL_PLAYER = 2
 
 const DT = {
@@ -29,7 +29,8 @@ const DT = {
         ],
         isGoal: false,
         teammateCoords:[],
-        command: null
+        command: null,
+        myCoords: {},
     },
     root: {
         exec(mgr, state) {
@@ -147,6 +148,7 @@ const DT = {
     },
     updateTeammateCoords: {
         exec(mgr, state) {
+            console.log('сохраняю, я молодец')
             state.teammateCoords.push({
                 pos: mgr.getPlayerPos(TEAM),
                 angle: mgr.getAngle(`p"${TEAM}"`) === null ? mgr.getAngle(`p"${TEAM}"${NUMBER_GOAL_PLAYER}`) : mgr.getAngle(`p"${TEAM}"`)

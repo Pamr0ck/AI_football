@@ -16,7 +16,7 @@ function createAgent(teamName, coords, position, goalie) {
     }, 20)
 }
 
-createAgent("biba", "-12 -15", 'l', false)
+createAgent("biba", "-20 -10", 'l', false)
 createAgent("biba", "-25 10", 'l', false)
 createAgent("boba", "51 -8", 'r', false)
 createAgent("boba", "51 8", 'r', false)

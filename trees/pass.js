@@ -159,7 +159,7 @@ const DT = {
     kick: {
         exec(mgr, state) {
             const angle = mgr.getAngleToPass(state.teammateCoords)
-            const power = mgr.getFCNKGNormalDistance(state.teammateCoords[state.teammateCoords.length-1].pos)*3 + 45;
+            const power = mgr.getFCNKGNormalDistance(state.teammateCoords[state.teammateCoords.length-1].pos)*3 + 50;
             console.log(mgr.getFCNKGNormalDistance(state.teammateCoords[state.teammateCoords.length-1].pos));
 
             state.command = {

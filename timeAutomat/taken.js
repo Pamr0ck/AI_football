@@ -111,7 +111,7 @@ const Taken = {
             closest(myTeam) {
                 if (ball) {
                     if (flagsList.length < 2) {
-                        console.log('Мало флагов')
+                        // console.log('Мало флагов')
                     } else {
                         const distanceList = []
                         let playersList = []

@@ -54,7 +54,7 @@ class Agent {
 
 
     analyzeEnv(msg, cmd, p) { // Анализ сообщения
-        if (cmd === 'hear' && (p[2].includes('goal_l_') || p[2].includes('goal_r_'))) {
+        if (cmd === 'hear' && (p[2].includes('goal_l_') || p[2].includes('goal_r_') || p[2].includes('before_kick_off'))) {
             switch(this.id) {
                 case 1:
                     this.act = {n: "move", v: `-6 6`}

@@ -55,19 +55,19 @@ class Agent {
         if (cmd === 'hear' && (p[2].includes('goal_l_') || p[2].includes('goal_r_'))) {
             switch(this.id) {
                 case 1:
-                    this.act = {n: "move", v: `-10 0`}
+                    this.act = {n: "move", v: `-6 6`}
                     break;
                 case 2:
-                    this.act = {n: "move", v: `-5 -25`}
+                    this.act = {n: "move", v: `-6 -6`}
                     break;
                 case 3:
-                    this.act = {n: "move", v: `-5 25`}
+                    this.act = {n: "move", v: `-15 21`}
                     break;
                 case 4:
-                    this.act = {n: "move", v: `-15 -15`}
+                    this.act = {n: "move", v: `-15 0`}
                     break;
                 case 5:
-                    this.act = {n: "move", v: `-15 15`}
+                    this.act = {n: "move", v: `-15 -21`}
                     break;
                 case 6:
                     this.act = {n: "move", v: `-27 30`}

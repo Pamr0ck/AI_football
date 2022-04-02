@@ -25,34 +25,34 @@ function createAgent(teamName, coords, position, goalie) {
 // // createAgent("boba", "51 -8", 'r', false)
 // createAgent("boba", "52.5 0", 'r', true)
 setTimeout(()=> {
-    createAgent('Biba', '-10 0', 'l', false)
+    createAgent('Biba', '-6 6', 'l', false)
 },100)
 setTimeout(()=> {
-    createAgent('Biba', '-5 -25', 'l', false)
+    createAgent('Biba', '-6 -6', 'l', false)
 },100)
 setTimeout(()=> {
-    createAgent('Biba',  '-5 25', 'l', false)
+    createAgent('Biba',  '-15 21', 'l', false)
 },100)
 setTimeout(()=> {
-    createAgent('Biba', '-15 -15', 'l', false)
+    createAgent('Biba', '-15 0', 'l', false)
 },100)
 setTimeout(()=> {
-    createAgent('Biba', '-15 15', 'l', false)
+    createAgent('Biba', '-15 -21', 'l', false)
 },100)
 setTimeout(()=> {
-    createAgent('Biba', '-25 -15', 'l', false)
+    createAgent('Biba', '-27 30', 'l', false)
 },100)
 setTimeout(()=> {
-    createAgent('Biba', '-25 15', 'l', false)
+    createAgent('Biba', '-27 0', 'l', false)
 },100)
 setTimeout(()=> {
-    createAgent('Biba', '-35 -25', 'l', false)
+    createAgent('Biba', '-27 -30', 'l', false)
 },100)
 setTimeout(()=> {
-    createAgent('Biba', '-35 0', 'l', false)
+    createAgent('Biba', '-35 13', 'l', false)
 },100)
 setTimeout(()=> {
-    createAgent('Biba',  '-35 25', 'l', false)
+    createAgent('Biba',  '-35 -13', 'l', false)
 },100)
 setTimeout(()=> {
     createAgent('Biba','-50 0','l', true)

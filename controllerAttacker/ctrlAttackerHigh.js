@@ -52,6 +52,7 @@ const ctrlAttackHigh = {
     defendGoal(input) { // Защита ворот
         if(input.ball) {
             const close = input.closest(true)
+// если я ближ другого игрока, то я бегу к мячу
             if((close[0] && close[0].dist > input.ball.dist)
                 || !close[0] ) {
                 this.last = "defend"

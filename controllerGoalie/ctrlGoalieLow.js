@@ -3,11 +3,11 @@ const CTRL_LOW = {
     execute(input, controllers, team, side) {
         const next = controllers[0] // Следующий уровень
         this.taken = Taken.setSee(input, team, side)
-        if(this.taken.ball && this.taken.ball.dist < 0.5) // Мяч рядом
+        if(this.taken.ball && this.taken.ball.dist < 0.5 && Math.abs(this.taken.myPos.x) > 35) // Мяч рядом
             this.taken.canKick = true
         else
             this.taken.canKick = false
-        if(this.taken.ball && this.taken.myPos && this.taken.ball.dist < 1.2 && Math.abs(this.taken.myPos.x) > 32
+        if(this.taken.ball && this.taken.myPos && this.taken.ball.dist < 1.2 && Math.abs(this.taken.myPos.x) > 35
             && Math.abs(this.taken.myPos.y) < 18) // Мяч рядом
             this.taken.canCatch = true
         else

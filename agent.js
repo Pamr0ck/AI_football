@@ -37,7 +37,7 @@ class Agent {
         if (!data) throw new Error("Parse error\n" + msg)
         // Первое (hear) - начало игры
         if (data.cmd == "hear") {
-            if (data.msg.includes('play_on') || data.msg.includes('kick_off_'))
+            if (data.msg.includes('play_on') || data.msg.includes('kick_off_') )
                 this.run = true
         }
         if (data.cmd == "init") this.initAgent(data.p) //Инициализация
@@ -99,10 +99,13 @@ class Agent {
     }
 
     sendCmd() {
+        if (this.act?.n === 'move'){
+            this.socketSend(this.act.n, this.act.v)
+        }
         if (this.run) { // Игра начата
             if (this.act) { // Есть команда от игрока
-                // if (this.act.n == "kick") // Пнуть мяч
-                if (this.act.n !== "move") // Пнуть мяч
+                if (this.act.n == "kick") // Пнуть мяч
+                // if (this.act.n !== "move") // Пнуть мяч
                     this.socketSend(this.act.n, this.act.v)
                 else // Движение и поворот
                     this.socketSend(this.act.n, this.act.v)

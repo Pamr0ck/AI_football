@@ -39,6 +39,8 @@ class Agent {
         if (data.cmd == "hear") {
             if (data.msg.includes('play_on') || data.msg.includes('kick_off_') )
                 this.run = true
+            if (data.msg.includes('goal'))
+                this.run = false
         }
         if (data.cmd == "init") this.initAgent(data.p) //Инициализация
         this.analyzeEnv(data.msg, data.cmd, data.p) // Обработка

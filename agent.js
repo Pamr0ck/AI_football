@@ -70,19 +70,19 @@ class Agent {
                     this.act = {n: "move", v: `-15 15`}
                     break;
                 case 6:
-                    this.act = {n: "move", v: `-25 -15`}
+                    this.act = {n: "move", v: `-27 30`}
                     break;
                 case 7:
-                    this.act = {n: "move", v: `-25 15`}
+                    this.act = {n: "move", v: `-27 0`}
                     break;
                 case 8:
-                    this.act = {n: "move", v: `-35 -25`}
+                    this.act = {n: "move", v: `-27 -30`}
                     break;
                 case 9:
-                    this.act = {n: "move", v: `-35 0`}
+                    this.act = {n: "move", v: `-35 13`}
                     break;
                 case 10:
-                    this.act = {n: "move", v: `-35 25`}
+                    this.act = {n: "move", v: `-35 -13`}
                     break;
                 case 11:
                     this.act = {n: "move", v: `-50 0`}

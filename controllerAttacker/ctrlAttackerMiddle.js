@@ -18,7 +18,7 @@ const ctrlAttackMiddle = {
             return input.cmd
         }
     },
-    actionReturnAttack(input) { // Возврат к своим воротам
+    actionReturnAttack(input) { // Возврат к своим кт
         let goal = ''
         if (input.id === 1) {
             goal = (input.side === 'l') ? 'fprc' : 'fplc'

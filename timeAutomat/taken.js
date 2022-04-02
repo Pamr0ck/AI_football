@@ -88,11 +88,13 @@ const Taken = {
         } else if (flagsList.length > 2){
             myPos = orientation.orientationWithThreeFlag(...flagsList.filter((p) => true))
         }
+        //ворота
         const goalOwnTeam = input.find((obj) => obj.cmd && (obj.cmd.p.join('') === ((side === 'l') ? 'gl' : 'gr')))
         let goalOwn = (goalOwnTeam) ? {
             dist: goalOwnTeam.p[0],
             angle: goalOwnTeam.p[1]
         } : null
+        // ворота
         const goalOtherTeam = input.find((obj) => obj.cmd && (obj.cmd.p.join('') === ((side === 'r') ? 'gl' : 'gr')))
         let goalOther = (goalOtherTeam) ? {
             dist: goalOtherTeam.p[0],

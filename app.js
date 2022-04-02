@@ -49,10 +49,10 @@ setTimeout(()=> {
     createAgent('Biba', '-27 -30', 'l', false)
 },100)
 setTimeout(()=> {
-    createAgent('Biba', '-35 13', 'l', false)
+    createAgent('Biba',  '-35 -13', 'l', false)
 },100)
 setTimeout(()=> {
-    createAgent('Biba',  '-35 -13', 'l', false)
+    createAgent('Biba', '-35 13', 'l', false)
 },100)
 setTimeout(()=> {
     createAgent('Biba','-50 0','l', true)
@@ -82,10 +82,10 @@ setTimeout(()=> {
     createAgent('Boba', '35 -25', 'r', false)
 },100)
 setTimeout(()=> {
-    createAgent('Boba','35 0', 'r', false)
+    createAgent('Boba','35 25', 'r', false)
 },100)
 setTimeout(()=> {
-    createAgent('Boba','35 25', 'r', false)
+    createAgent('Boba','35 0', 'r', false)
 },100)
 setTimeout(()=> {
     createAgent('Boba', '50 0', 'r', true)

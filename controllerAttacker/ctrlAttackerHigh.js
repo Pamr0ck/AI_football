@@ -15,7 +15,7 @@ const ctrlAttackHigh = {
                 if (input.playersListMy.length && input.id > 3) {
                     input.newAction = "return"
                     input.playersListMy.sort((p1, p2) => {
-                        return p1.p[1] - p2.p[2]
+                        return p1.p[1] - p2.p[1]
                     })
                     if ((!input.goalOther || input.playersListMy[0].p[1] < input.goalOther.dist - 15)
                         && input.playersListMy[0].p[1] > 4 && (!input.goalOwn || input.goalOwn.dist > 25))
@@ -24,7 +24,7 @@ const ctrlAttackHigh = {
                 if (input.goalOther) {
                     if (input.goalOther.dist > 40)
                         return {n: "kick", v: `30 ${input.goalOther.angle}`}
-                    return {n: "kick", v: `110 ${input.goalOther.angle}`}
+                    return {n: "kick", v: `100 ${input.goalOther.angle}`}
                 }
             } else {
                 input.newAction = "return"
@@ -37,12 +37,13 @@ const ctrlAttackHigh = {
             return {n: "kick", v: `10 45`}
         }
     },
+    //|| (close[1] && close[1].dist > input.ball.dist)
+    //                 || !close[1]
     defendGoal(input) { // Защита ворот
         if(input.ball) {
             const close = input.closest(true)
             if((close[0] && close[0].dist > input.ball.dist)
-                || !close[0] || (close[1] && close[1].dist > input.ball.dist)
-                || !close[1]) {
+                || !close[0] ) {
                 this.last = "defend"
                 if (input.id < 4 && input.goalOwn && input.goalOwn.dist < 50) {
                     input.newAction = "return"

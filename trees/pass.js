@@ -1,6 +1,6 @@
 const FL = "flag", PS = "pass", ST= "stop", SAY = "say"
-const TEAM = "Team"
-const START_COORD = "-12 -15"
+const TEAM = "biba"
+const START_COORD = "-18 -10"
 const NUMBER_GOAL_PLAYER = 2
 
 const DT = {
@@ -29,7 +29,8 @@ const DT = {
         ],
         isGoal: false,
         teammateCoords:[],
-        command: null
+        command: null,
+        myCoords: {},
     },
     root: {
         exec(mgr, state) {
@@ -116,7 +117,7 @@ const DT = {
                 n: "turn",
                 v: mgr.getAngle(state.action.fl)
             }
-            console.log("ROTATE")
+            // console.log("ROTATE")
         },
         next: "sendCommand",
     },
@@ -126,7 +127,7 @@ const DT = {
                 n: "dash",
                 v: 60
             }
-            console.log("RUN")
+            // console.log("RUN")
         },
         next: "sendCommand",
     },
@@ -147,6 +148,7 @@ const DT = {
     },
     updateTeammateCoords: {
         exec(mgr, state) {
+            console.log('сохраняю, я молодец')
             state.teammateCoords.push({
                 pos: mgr.getPlayerPos(TEAM),
                 angle: mgr.getAngle(`p"${TEAM}"`) === null ? mgr.getAngle(`p"${TEAM}"${NUMBER_GOAL_PLAYER}`) : mgr.getAngle(`p"${TEAM}"`)
@@ -156,10 +158,13 @@ const DT = {
     },
     kick: {
         exec(mgr, state) {
+            const angle = mgr.getAngleToPass(state.teammateCoords)
+            const power = mgr.getFCNKGNormalDistance(state.teammateCoords[state.teammateCoords.length-1].pos)*3 + 50;
+            console.log(mgr.getFCNKGNormalDistance(state.teammateCoords[state.teammateCoords.length-1].pos));
+
             state.command = {
                 n: "kick",
-                //v: `90 ${mgr.getAngle(`p"${TEAM}"`) === null ? mgr.getAngle(`p"${TEAM}"${NUMBER_GOAL_PLAYER}`) : mgr.getAngle(`p"${TEAM}"`)}`
-                v: `100 ${mgr.getAngleToPass(state.teammateCoords)}`
+                v: `${power} ${angle}`
             }
             state.teammateCoords = []
             state.next++
@@ -169,8 +174,8 @@ const DT = {
     },
     playerInvisible: {
         exec(mgr, state) {
-            console.log("INVIS")
-            console.log(mgr.getVisible(`p"${TEAM}"`))
+            // console.log("INVIS")
+            // console.log(mgr.getVisible(`p"${TEAM}"`))
             state.command = {
                 n: "kick",
                 v: "10 45"

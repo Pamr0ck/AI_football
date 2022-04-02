@@ -1,3 +1,7 @@
+/**
+ * DEPRECATED
+ * */
+
 const TA = {
     current: "start", // Текущее состояние автомата
     state: { // Описание состояния
@@ -398,4 +402,4 @@ const TA = {
     }
 }
 
-module.exports = TA
+// module.exports = TA

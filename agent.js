@@ -1,13 +1,10 @@
 const Msg = require('./msg') // Подключение модуля разбора сообщений от сервера
-// const DecisionTreeManager = require('./trees/treeManager')
-// const flag_dt = require('./trees/movementTree')
-// const twoPlayersDT = require('./trees/twoPlayerTree')
-// const goalie_dt = require('./trees/goalkeeper')
-// const passDT = require('./trees/pass')
-// const goalDT = require('./trees/goal')
-const manager = require('./timeAutomat/manager')
-const attack_ta = require('./timeAutomat/attackAutomat')
-const goalie_ta = require('./timeAutomat/goalieAutomat')
+const ctrlAttackerHigh = require('./controllerAttacker/ctrlAttackerHigh')
+const ctrlAttackerMiddle = require('./controllerAttacker/ctrlAttackerMiddle')
+const ctrlAttackerLow = require('./controllerAttacker/ctrlAttackerLow')
+const ctrlGoalieHigh = require('./controllerGoalie/ctrlGoalieHigh')
+const ctrlGoalieMiddle = require('./controllerGoalie/ctrlGoalieMiddle')
+const ctrlGoalieLow = require('./controllerGoalie/ctrlGoalieLow')
 
 // Подключение модуля ввода из командной строки
 class Agent {
@@ -40,7 +37,7 @@ class Agent {
         if (!data) throw new Error("Parse error\n" + msg)
         // Первое (hear) - начало игры
         if (data.cmd == "hear") {
-            if (data.msg.includes('play_on'))
+            if (data.msg.includes('play_on') || data.msg.includes('kick_off_'))
                 this.run = true
         }
         if (data.cmd == "init") this.initAgent(data.p) //Инициализация
@@ -55,23 +52,57 @@ class Agent {
 
 
     analyzeEnv(msg, cmd, p) { // Анализ сообщения
-        if (cmd === 'see' && this.run) {
-            if (this.position === 'l' && this.id === 1) {
-                this.act = manager.getAction(p, attack_ta, this.teamName, this.position, false)
-                //console.log(this.act)
-            } else if (this.position === 'r' && this.id === 1) {
-                this.act = manager.getAction(p, goalie_ta, this.teamName, this.position, false)
-                //console.log(this.act)
+        if (cmd === 'hear' && (p[2].includes('goal_l_') || p[2].includes('goal_r_'))) {
+            switch(this.id) {
+                case 1:
+                    this.act = {n: "move", v: `-10 0`}
+                    break;
+                case 2:
+                    this.act = {n: "move", v: `-5 -25`}
+                    break;
+                case 3:
+                    this.act = {n: "move", v: `-5 25`}
+                    break;
+                case 4:
+                    this.act = {n: "move", v: `-15 -15`}
+                    break;
+                case 5:
+                    this.act = {n: "move", v: `-15 15`}
+                    break;
+                case 6:
+                    this.act = {n: "move", v: `-25 -15`}
+                    break;
+                case 7:
+                    this.act = {n: "move", v: `-25 15`}
+                    break;
+                case 8:
+                    this.act = {n: "move", v: `-35 -25`}
+                    break;
+                case 9:
+                    this.act = {n: "move", v: `-35 0`}
+                    break;
+                case 10:
+                    this.act = {n: "move", v: `-35 25`}
+                    break;
+                case 11:
+                    this.act = {n: "move", v: `-50 0`}
+                    break;
             }
-        } else if (cmd === 'hear' && this.run) {
-            manager.setHear(p)
+        }
+        if (cmd === 'see' && this.run) {
+            if (this.id < 11) {
+                this.act = ctrlAttackerLow.execute(p, [ctrlAttackerMiddle, ctrlAttackerHigh], this.teamName, this.position, this.id)
+            } else {
+                this.act = ctrlGoalieLow.execute(p, [ctrlGoalieMiddle, ctrlGoalieHigh], this.teamName, this.position, this.id)
+            }
         }
     }
 
     sendCmd() {
         if (this.run) { // Игра начата
             if (this.act) { // Есть команда от игрока
-                if (this.act.n == "kick") // Пнуть мяч
+                // if (this.act.n == "kick") // Пнуть мяч
+                if (this.act.n !== "move") // Пнуть мяч
                     this.socketSend(this.act.n, this.act.v)
                 else // Движение и поворот
                     this.socketSend(this.act.n, this.act.v)

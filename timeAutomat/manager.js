@@ -1,3 +1,8 @@
+/**
+ * DEPRECATED
+ * */
+
+
 const Taken = require('./taken')
 const BEFORE_ACTION = "beforeAction"
 const Manager = {
@@ -159,4 +164,4 @@ const Manager = {
 }
 
 
-module.exports = Manager
+// module.exports = Manager

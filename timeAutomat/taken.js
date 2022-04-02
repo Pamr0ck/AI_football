@@ -71,6 +71,7 @@ const Taken = {
         }
         const playersListAll = input.filter((obj) => obj.cmd && obj.cmd.p[0] === 'p')
         const playersListMy = input.filter((obj) => obj.cmd && obj.cmd.p[0] === 'p' && obj.cmd.p[1] === `"${team}"`)
+        const playersListEnemy = input.filter((obj) => obj.cmd && obj.cmd.p[0] === 'p' && obj.cmd.p[1] !== `"${team}"`)
         //console.log(team, id)
         const flagsList = input.filter((obj) => obj.cmd && (obj.cmd.p[0] === 'f' || obj.cmd.p[0] === 'g'))
         let flags = {}
@@ -107,6 +108,7 @@ const Taken = {
             myPos,
             team,
             playersListMy,
+            playersListEnemy,
             goalOther,
             goalOwn,
             side,
@@ -117,9 +119,12 @@ const Taken = {
                     } else {
                         const distanceList = []
                         let playersList = []
-                        if (myTeam) {
+                        if (myTeam === true) {
                             playersList = playersListMy
-                        } else {
+                        }else if (myTeam=== false){
+                            playersList = playersListEnemy
+                        }
+                        else {
                             playersList = playersListAll
                         }
                         playersList.forEach((p) => {

@@ -9,6 +9,16 @@ const ctrlAttackHigh = {
         this.last = "previous"
     },
     immediateReaction(input) { // Немедленная реакция
+        const closeEnemy = input.closest(false)
+        const closeMy = input.closest(true)
+        if ((closeEnemy[0] && closeEnemy[0].dist<1) && (closeMy[0] && closeMy[0].dist<20) ){
+            // console.log('пресуют', input.id, input.canKick);
+            if (input.canKick){
+                console.log('пасую', input.id,closeMy[0] );
+                const angle = (input.playersListMy[0].p[1])
+                return {n: "kick", v: `${closeMy[0].dist*2+30} ${angle}`}
+            }
+        }
         if(input.canKick) {
             this.last = "kick"
             if (input.id < 8) {

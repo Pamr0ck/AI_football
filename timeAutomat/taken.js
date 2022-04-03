@@ -127,13 +127,18 @@ const Taken = {
                         else {
                             playersList = playersListAll
                         }
+                        // console.log(playersList)
+                        // p[1] - angle, p[0] distance, p.cmd.p[2]
                         playersList.forEach((p) => {
+                            // console.log(p.cmd.p)
                             const newFlags = orientation.getFlagsFromObject(p, flagsList.filter((p) => true))
                             const playerCoords = orientation.orientationWithThreeFlag(...newFlags)
                             if (playerCoords) {
                                 distanceList.push({
                                     coords: playerCoords,
-                                    dist: Math.sqrt(ballObj.p[0]**2 + p.p[0]**2 - 2*ballObj.p[0]*p.p[0]*Math.cos((p.p[1] - ballObj.p[[1]])*Math.PI/ 180))
+                                    dist: Math.sqrt(ballObj.p[0]**2 + p.p[0]**2 - 2*ballObj.p[0]*p.p[0]*Math.cos((p.p[1] - ballObj.p[[1]])*Math.PI/ 180)),
+                                    angle: p.p[1],
+                                    id: p.cmd.p[2] ? p.cmd.p[2]: 99
                                 })
                             }
                         })

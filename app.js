@@ -57,36 +57,38 @@ setTimeout(()=> {
 setTimeout(()=> {
     createAgent('Biba','-50 0','l', true)
 },100)
+
+
 setTimeout(()=> {
-    createAgent('Boba', '10 0', 'r', false)
+    createAgent('Boba', '6 6', 'r', false)
 },100)
 setTimeout(()=> {
-    createAgent('Boba', '5 25', 'r', false)
+    createAgent('Boba', '6 -6', 'r', false)
 },100)
 setTimeout(()=> {
-    createAgent('Boba', '5 -25', 'r', false)
+    createAgent('Boba',  '15 21', 'r', false)
 },100)
 setTimeout(()=> {
-    createAgent('Boba', '15 -15', 'r', false)
+    createAgent('Boba', '15 0', 'r', false)
 },100)
 setTimeout(()=> {
-    createAgent('Boba', '15 15', 'r', false)
+    createAgent('Boba', '15 -21', 'r', false)
 },100)
 setTimeout(()=> {
-    createAgent('Boba', '25 15', 'r', false)
+    createAgent('Boba', '27 30', 'r', false)
 },100)
 setTimeout(()=> {
-    createAgent('Boba', '25 -15', 'r', false)
+    createAgent('Boba', '27 0', 'r', false)
 },100)
 setTimeout(()=> {
-    createAgent('Boba', '35 -25', 'r', false)
+    createAgent('Boba', '27 -30', 'r', false)
 },100)
 setTimeout(()=> {
-    createAgent('Boba','35 25', 'r', false)
+    createAgent('Boba',  '35 -13', 'r', false)
 },100)
 setTimeout(()=> {
-    createAgent('Boba','35 0', 'r', false)
+    createAgent('Boba', '35 13', 'r', false)
 },100)
 setTimeout(()=> {
-    createAgent('Boba', '50 0', 'r', true)
+    createAgent('Boba','50 0','r', true)
 },100)

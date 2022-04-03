@@ -5,8 +5,11 @@ const CTRL_HIGH = {
         if(immediate) return immediate
         const defend = this.defendGoal(input)
         if(defend) return defend
-        if(this.last === "defend")
+        if (input.myPos?.x && input.myPos?.y && Math.abs(input.myPos.x)<35 ||Math.abs(input.myPos.y)<18 ){
             input.newAction = "return"
+        }else if(this.last === "defend"){
+            input.newAction = "return"
+        }
         this.last = "previous"
     },
     afterCatch(input) {
@@ -27,21 +30,21 @@ const CTRL_HIGH = {
             if(input.goalOther) {
                 if(input.goalOther.dist > 40)
                     return {n: "kick", v: `30 ${input.goalOther.angle}`}
-                return {n: "kick", v: `110 ${input.goalOther.angle}`}
+                return {n: "kick", v: `100 ${input.goalOther.angle}`}
             }
             return {n: "kick", v: `10 45`}
         }
     },
     defendGoal(input) { // Защита ворот
         if(input.ball) {
-            const close = input.closest("b")
+            const close = input.closest(false)
             if((close[0] && close[0].dist + 1 > input.ball.dist)
                 || (input.ball.dist < 20 && input.ball.dist > 1.2)) {
                 this.last = "defend"
                 if(Math.abs(input.ball.angle) > 5)
                     return {n: "turn", v: input.ball.angle}
                 if (input.ball.dist > 1)
-                    return {n: "dash", v: 110}
+                    return {n: "dash", v: 100}
                 else
                     return {n: "dash", v: 30}
             }

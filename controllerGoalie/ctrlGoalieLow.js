@@ -7,7 +7,7 @@ const CTRL_LOW = {
             this.taken.canKick = true
         else
             this.taken.canKick = false
-        if(this.taken.ball && this.taken.myPos && this.taken.ball.dist < 1.2 && Math.abs(this.taken.myPos.x) > 35
+        if(this.taken.ball && this.taken.myPos && this.taken.ball.dist < 1.2 && Math.abs(this.taken.myPos.x) > 36
             && Math.abs(this.taken.myPos.y) < 18) // Мяч рядом
             this.taken.canCatch = true
         else

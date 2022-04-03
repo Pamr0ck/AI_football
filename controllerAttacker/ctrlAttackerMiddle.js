@@ -29,9 +29,9 @@ const ctrlAttackMiddle = {
         } else if (input.id < 6) {
             goal = 'fc'
         } else if (input.id === 6) {
-            goal = 'fct'
+            goal = (input.side === 'l') ?'fcb': 'fct'
         } else if (input.id === 7) {
-            goal = 'fcb'
+            goal = (input.side === 'l') ?'fct': 'fcb'
         } else if (input.id === 8) {
             goal = (input.side === 'l') ? 'fplt' : 'fprb'
         } else if (input.id === 9) {

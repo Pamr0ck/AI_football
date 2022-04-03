@@ -113,6 +113,8 @@ const Taken = {
             goalOwn,
             side,
             closest(myTeam) {
+                //tODO id, angle
+                // console.log(input)
                 if (ball) {
                     if (flagsList.length < 2) {
                         // console.log('Мало флагов')

@@ -8,39 +8,61 @@ const ctrlAttackHigh = {
             input.newAction = "return"
         this.last = "previous"
     },
+    //
     immediateReaction(input) { // Немедленная реакция
         const closeEnemy = input.closest(false)
         const closeMy = input.closest(true)
         if(input.canKick) {
             this.last = "kick"
             if (input.id < 8) {
-                if (input.playersListMy.length && input.id > 3) {
+
+                if (closeMy[0] && input.id > 3) {
                     input.newAction = "return"
-                    input.playersListMy.sort((p1, p2) => {
-                        return p1.p[1] - p2.p[1]
-                    })
-                    if ((!input.goalOther || input.playersListMy[0].p[1] < input.goalOther.dist - 15)
-                        && input.playersListMy[0].p[1] > 4 && (!input.goalOwn || input.goalOwn.dist > 25))
-                        return {n: "kick", v: `${input.playersListMy[0].p[1]*2} ${input.playersListMy[0].p[0]}`}
+                    if ((!input.goalOther || closeMy[0].dist < input.goalOther.dist - 15)
+                        && closeMy[0].dist<40 &&closeMy[0].angle > 4  && closeMy[0].id !== 11)
+                        return {n: "kick", v: `${closeMy[0].angle} ${closeMy[0].dist*2}`}
                 }
+                if (input.id > 3 && (closeMy[0] && closeMy[0].dist<30) ){
+
+                    console.log('пасую, полузащ', input.id,'->',closeMy[0].id );
+                    const angle = (closeMy[0].angle)
+                    return {n: "kick", v: `${closeMy[0].dist*2+30} ${angle}`}
+                }
+
+                // по воротам
                 if (input.goalOther) {
-                    if (input.goalOther.dist > 40)
-                        return {n: "kick", v: `30 ${input.goalOther.angle}`}
+                    if (input.goalOther.dist > 35 &&  (closeEnemy[0] && closeEnemy[0].dist<1) && (closeMy[0] && closeMy[0].dist<30) && (!input.goalOwn || input.goalOwn.dist > 25)){
+                        console.log('пасую пресуют', input.id,'->',closeMy[0].id );
+                        const angle = (closeMy[0].angle)
+                        return {n: "kick", v: `${closeMy[0].dist*2+30} ${angle}`}
+                    }
                     return {n: "kick", v: `100 ${input.goalOther.angle}`}
                 }
             } else {
+                //пас от защитников своим либо выпинывание
                 input.newAction = "return"
-                const topFlag = (input.side === 'l') ? 'frt' : 'flt'
-                const botFlag = (input.side === 'l') ? 'frb' : 'flb'
-                if (input.goalOther) return {n: "kick", v: `80 ${input.goalOther.angle}`}
-                else if (input.flags[topFlag]) return {n: "kick", v: `80 ${input.flags[topFlag].angle}`}
-                else if (input.flags[botFlag]) return {n: "kick", v: `80 ${input.flags[botFlag].angle}`}
+                let player = undefined;
+                if (closeMy[0] && closeMy[0].id !== 11){
+                    player = closeMy[0]
+                } else if(closeMy[1] && closeMy[1].id!==11){
+                    player = closeMy[1]
+                }
+                if(player){
+                    console.log('пасую защ', input.id,'->',player.id );
+                    const angle = (player.angle)
+                    return {n: "kick", v: `${player.dist*2+30} ${angle}`}
+                } else{
+                    console.log('выпинываю ', input.id );
+                    const topFlag = (input.side === 'l') ? 'frt' : 'flt'
+                    const botFlag = (input.side === 'l') ? 'frb' : 'flb'
+                    if (input.goalOther) return {n: "kick", v: `80 ${input.goalOther.angle}`}
+                    else if (input.flags[topFlag]) return {n: "kick", v: `80 ${input.flags[topFlag].angle}`}
+                    else if (input.flags[botFlag]) return {n: "kick", v: `80 ${input.flags[botFlag].angle}`}
+                }
             }
             return {n: "kick", v: `10 45`}
         }
     },
-    //|| (close[1] && close[1].dist > input.ball.dist)
-    //                 || !close[1]
     defendGoal(input) { // Защита ворот
         if(input.ball) {
             const close = input.closest(true)

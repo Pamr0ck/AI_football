@@ -3,7 +3,7 @@ const ctrlAttackLow = {
     execute(input, controllers, team, side, id) {
         const next = controllers[0] // Следующий уровень
         this.taken = Taken.setSee(input, team, side, id)
-        if(this.taken.ball && this.taken.ball.dist < 0.5) // Мяч рядом
+        if(this.taken.ball && this.taken.ball.dist < 1) // Мяч рядом
             this.taken.canKick = true
         else
             this.taken.canKick = false
